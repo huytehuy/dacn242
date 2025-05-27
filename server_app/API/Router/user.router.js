@@ -5,9 +5,9 @@ var router = express.Router()
 const userController = require('../Controller/user.controller')
 const auth = require('../MiddleWare')
 
-router.get('/', auth.verifyToken,userController.index)
+router.get('/', auth.optionalVerifyToken,userController.index)
 
-router.get('/:id',auth.verifyToken,userController.user)
+router.get('/:id',auth.optionalVerifyToken,userController.user)
 
 router.put('/', userController.update_user)
 
@@ -19,6 +19,6 @@ router.post('/', userController.post_user)
 router.post('/refresh-token', auth.verifyRefreshToken, userController.refreshToken)
 
 // Route logout
-router.post('/logout', auth.verifyToken, userController.logout)
+router.post('/logout', auth.optionalVerifyToken, userController.logout)
 
 module.exports = router

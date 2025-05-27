@@ -320,12 +320,12 @@ function Header(props) {
                                     </div>
                                 }
                             </form>
-                            <div className="hm-searchbox1" onSubmit={handler_search}>
+                            {/* <div className="hm-searchbox1" onSubmit={handler_search}> 
 
                                 <Link to={`/imgSearch`}  ><button className="li-btn" type="submit"><i className="fa fa-camera"></i></button>/</Link>
 
 
-                            </div>
+                            </div> */}
 
                             <div className="ml-15 header-middle-right d-flex justify-content-between align-items-center" onClick={toggleCartVisibility}>
                                 <ul className="hm-menu d-flex justify-content-between align-items-center">
