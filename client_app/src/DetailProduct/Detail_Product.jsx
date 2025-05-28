@@ -405,7 +405,7 @@ function Detail_Product() {
                                         {
                                             list_comment && list_comment.map(value => (
                                                 value.status !== '1' && (<div className="comment-author-infos pt-25" key={value._id}>
-                                                    <span>{value.id_user.fullname} <div style={{ fontWeight: '400' }}>{value.content}</div></span>
+                                                    <span><div style={{ fontWeight: '400' }}>{value.content}</div></span>
                                                     <ul className="rating">
                                                         <li><i className={value.star > 0 ? 'fa fa-star' : 'fa fa-star-o'}></i></li>
                                                         <li><i className={value.star > 1 ? 'fa fa-star' : 'fa fa-star-o'}></i></li>
