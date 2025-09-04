@@ -5,6 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 import Products from './Component/Products';
 import Pagination from './Component/Pagination';
 import Search from './Component/Search';
+import { useTranslation } from 'react-i18next';
 
 // Thay thế useEffect fetch brands bằng danh sách cố định
 const POPULAR_BRANDS = [
@@ -21,7 +22,7 @@ const POPULAR_BRANDS = [
 ];
 
 function Shop() {
-
+    const { t } = useTranslation();
     const { id } = useParams()
 
     const [products, setProducts] = useState([])
@@ -182,8 +183,8 @@ function Shop() {
                 <div className="container">
                     <div className="breadcrumb-content">
                         <ul>
-                            <li><a href="index.html">Trang chủ</a></li>
-                            <li className="active">Danh mục</li>
+                            <li><a href="index.html">{t("Home")}</a></li>
+                            <li className="active">{t("Category")}</li>
                         </ul>
                     </div>
                 </div>
@@ -202,7 +203,7 @@ function Shop() {
                                 </div>
                                 <div className="li-blog-sidebar pt-25">
                                     <ul className="li-blog-archive">
-                                        <h4 className="li-blog-sidebar-title"><li><Link to="/shop/all" style={id === 'all' ? { cursor: 'pointer', color: '#fed700' } : { cursor: 'pointer' }}>Tất cả</Link></li></h4>
+                                        <h4 className="li-blog-sidebar-title"><li><Link to="/shop/all" style={id === 'all' ? { cursor: 'pointer', color: '#fed700' } : { cursor: 'pointer' }}>{t("All")}</Link></li></h4>
                                     </ul>
                                 </div>
                                 <div className="li-blog-sidebar pt-25">
@@ -233,27 +234,27 @@ function Shop() {
                                 <div className="product-select-box">
                                     <div className="product-short d-flex align-items-center">
                                         <div className="mr-4">
-                                            <p>Sắp xếp theo:</p>
-                                            <select 
-                                                className="nice-select" 
-                                                value={pagination.sort} 
+                                            <p>{t("Sort_by")}</p>
+                                            <select
+                                                className="nice-select"
+                                                value={pagination.sort}
                                                 onChange={handleSortChange}
                                             >
-                                                <option value="default">Mặc định</option>
-                                                <option value="rating">Đánh giá cao nhất</option>
-                                                <option value="price_asc">Giá (Thấp → Cao)</option>
-                                                <option value="price_desc">Giá (Cao → Thấp)</option>
+                                                <option value="default">{t('Sort_by_default')}</option>
+                                                <option value="rating">{t('Sort_by_rating')}</option>
+                                                <option value="price_asc">{t('Sort_by_price_asc')}</option>
+                                                <option value="price_desc">{t('Sort_by_price_desc')}</option>
                                             </select>
                                         </div>
-                                        
+
                                         <div>
-                                            <p>Thương hiệu:</p>
-                                            <select 
-                                                className="nice-select" 
-                                                value={pagination.brand} 
+                                            <p>{t("Brand")}</p>
+                                            <select
+                                                className="nice-select"
+                                                value={pagination.brand}
                                                 onChange={handleBrandFilter}
                                             >
-                                                <option value="">Tất cả thương hiệu</option>
+                                                <option value="">{t("All_Brands")}</option>
                                                 {brands.map((brand, index) => (
                                                     <option key={index} value={brand}>
                                                         {brand}
@@ -274,7 +275,7 @@ function Shop() {
                                     <div className="paginatoin-area">
                                         <div className="row">
                                             <div className="col-lg-6 col-md-6">
-                                                <p>Hiển thị 1-9 sản phẩm</p>
+                                                <p>{t("Showing")} 1-9 {t("products")}</p>
                                             </div>
                                             <Pagination pagination={pagination} handlerChangePage={handlerChangePage} totalPage={totalPage} />
                                         </div>

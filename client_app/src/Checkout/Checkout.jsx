@@ -13,9 +13,8 @@ import Detail_OrderAPI from '../API/Detail_OrderAPI';
 import CouponAPI from '../API/CouponAPI';
 import MoMo from './MoMo.jsx'
 import LogoMomo from './momo-png/momo_icon_square_pinkbg_RGB.png'
-import Modal_Image from '../Modal';
-import Button from 'react-bootstrap/Button';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 const socket = io('https://datnfixed.onrender.com', {
     transports: ['websocket'], jsonp: false
@@ -24,7 +23,7 @@ socket.connect();
 
 
 function Checkout() {
-
+    const { t } = useTranslation();
     const [orderID, setOrderID] = useState('')
 
     const [carts, set_carts] = useState([])
@@ -40,8 +39,6 @@ function Checkout() {
     const [load_order_status, set_load_order_status] = useState(false)
 
     const [check_action, set_check_action] = useState(false)
-
-    const [modalShow, setModalShow] = React.useState(false);
 
     useEffect(() => {
 
@@ -382,8 +379,8 @@ function Checkout() {
                 <div className="container">
                     <div className="breadcrumb-content">
                         <ul>
-                            <li><a href="index.html">Trang chủ</a></li>
-                            <li className="active">Thanh toán</li>
+                            <li><a href="index.html">{t('Home')}</a></li>
+                            <li className="active">{t('Checkout')}</li>
                         </ul>
                     </div>
                 </div>
@@ -396,11 +393,11 @@ function Checkout() {
                         <div className="row">
                             <div className="col-lg-6 col-12 pb-5">
                                 <div className="checkbox-form">
-                                    <h3>THÔNG TIN GIAO HÀNG</h3>
+                                    <h3>{t('shipping_information')}</h3>
                                     <div className="row">
                                         <div className="col-md-12">
                                             <div className="checkout-form-list">
-                                                <label>Từ <span className="required">*</span></label>
+                                                <label>{t('from')} <span className="required">*</span></label>
                                                 <input type="text" name="from"
                                                     id="from_places"
                                                     disabled="true"
@@ -411,13 +408,13 @@ function Checkout() {
                                         </div>
                                         <div className="col-md-12">
                                             <div className="checkout-form-list">
-                                                <label>Đến <span className="required">*</span></label>
+                                                <label>{t('to')} <span className="required">*</span></label>
                                                 <input type="text"
                                                     id="to_places"
-                                                    placeholder="Nhập địa chỉ"
+                                                    placeholder={t('enter_address')}
                                                     value={information.address}
                                                     onChange={onChangeAddress} />
-                                                {error_address && <span style={{ color: 'red' }}>* Address is required</span>}
+                                                {error_address && <span style={{ color: 'red' }}>* {t('address_is_required')}</span>}
                                                 <input id="destination" name="destination" required="" type="hidden" />
                                             </div>
                                         </div>
@@ -425,17 +422,17 @@ function Checkout() {
                                             <div className="checkout-form-list">
                                                 <div className="form-group">
                                                     <label>
-                                                        Phương thức vận chuyển
+                                                        {t('shipping_method')}
                                                     </label>
                                                     <select id="travel_mode" name="travel_mode">
                                                         <option value="Tiết kiệm ">
-                                                            Tiết kiệm
+                                                            {t('economical')}
                                                         </option>
                                                         <option value="Hỏa tốc">
-                                                            Hỏa tốc
+                                                            {t('express')}
                                                         </option>
                                                         <option value="Tiêu chuẩn">
-                                                            Tiêu chuẩn
+                                                            {t('standard')}
                                                         </option>
                                                     </select>
                                                 </div>
@@ -444,15 +441,15 @@ function Checkout() {
                                         <div className="col-md-12">
                                             {hide&&<div id="result" >
                                                 <div>
-                                                    <label htmlFor="Kilometers">Khoảng cách:</label>&nbsp;
+                                                    <label htmlFor="Kilometers">{t('distance')}:</label>&nbsp;
                                                         <label id="in_kilo">5 km</label>
                                                 </div>
                                                 <div>
-                                                    <label htmlFor="Duration">Thời gian: </label>&nbsp;
+                                                    <label htmlFor="Duration">{t('duration')}:</label>&nbsp;
                                                         <label id="duration_text">15 phút</label>
                                                 </div>
                                                 <div>
-                                                    <label htmlFor="Price">Phí giao hàng: </label>&nbsp;
+                                                    <label htmlFor="Price">{t('shipping_fee')}:</label>&nbsp;
                                                         <label id="price_shipping">30.000</label>
                                                         &nbsp;<label>VNĐ</label>
                                                 </div>
@@ -503,8 +500,8 @@ function Checkout() {
                                             <div className="row">
                                                 <div className="col-md-12">
                                                     <div className="checkout-form-list">
-                                                        <label>Họ và tên <span className="required">*</span></label>
-                                                        <input placeholder="Ví dụ: Nguyễn Văn A" type="text" name="fullname"
+                                                        <label>{t('fullname')} <span className="required">*</span></label>
+                                                        <input placeholder={t('fullname_placeholder')} type="text" name="fullname"
                                                             ref={register({ required: true })}
                                                             value={information.fullname}
                                                             onChange={onChangeFullname} />
@@ -513,7 +510,7 @@ function Checkout() {
                                                 </div>
                                                 <div className="col-md-12">
                                                     <div className="checkout-form-list">
-                                                        <label>Số điện thoại <span className="required">*</span></label>
+                                                        <label>{t('phone')} <span className="required">*</span></label>
                                                         <input placeholder="123456..." type="text" name="phone"
                                                             ref={register({ required: true })}
                                                             value={information.phone}

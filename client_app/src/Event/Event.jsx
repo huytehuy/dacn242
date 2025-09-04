@@ -4,7 +4,7 @@ import queryString from 'query-string'
 import CouponAPI from '../API/CouponAPI';
 import Pagination from '../Shop/Component/Pagination';
 import { Link } from 'react-router-dom';
-import axiosClient from '../API/axiosClient.jsx'
+import { useTranslation } from 'react-i18next';
 
 function Event(props) {
 
@@ -16,7 +16,7 @@ function Event(props) {
 
     const [coupons, setCoupons] = useState([])
     const [totalPage, setTotalPage] = useState()
-
+const { t } = useTranslation();
 
     useEffect(() => {
         const query = '?' + queryString.stringify(pagination)
@@ -44,8 +44,8 @@ function Event(props) {
                 <div className="container">
                     <div className="breadcrumb-content">
                         <ul>
-                            <li><a href="index.html">Trang chủ</a></li>
-                            <li className="active">Sự kiện</li>
+                            <li><a href="/">{t('Home')}</a></li>
+                            <li className="active">{t('Event')}</li>
                         </ul>
                     </div>
                 </div>
@@ -62,19 +62,19 @@ function Event(props) {
                                     <div style={{ padding: '1rem 1.2rem' }}>
                                         <h4 className="h4_event">{value.describe}</h4>
                                         <div style={{ marginTop: '2rem' }}>
-                                            <a className="a_event">Khuyến mãi</a>
+                                            <a className="a_event">{t('Sales')}</a>
                                         </div>
                                         <div style={{ marginTop: '2rem' }}>
-                                            <span style={{ fontSize: '1rem', color: 'gray' }}>Còn lại: <i style={{ color: '#fed700' }}>{value.count} lần</i></span>
+                                            <span style={{ fontSize: '1rem', color: 'gray' }}>{t('Remaining')}: <i style={{ color: '#fed700' }}>{value.count} {t('times')}</i></span>
                                         </div>
                                         <hr />
                                         <div style={{ marginTop: '.5rem' }}>
                                             <span style={{ fontSize: '1rem', color: 'gray' }}>
-                                                Cơ hội nhận nhiều ưu đãi khi mua sản phẩm tại shop của chúng tôi
+                                                {t('Opportunity_to_receive_more_discounts_when_buying_products_at_our_shop')}
                                     </span>
                                         </div>
                                         <div style={{ marginTop: '1rem' }} className="d-flex justify-content-center">
-                                            <Link to={`/event/${value._id}`} className="a_promotion">Xem Ngay</Link>
+                                            <Link to={`/event/${value._id}`} className="a_promotion">{t('View_Now')}</Link>
                                         </div>
                                     </div>
                                 </div>

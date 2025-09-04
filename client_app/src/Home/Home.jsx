@@ -6,7 +6,9 @@ import { changeCount } from '../Redux/Action/ActionCount';
 import { useDispatch, useSelector } from 'react-redux';
 import CartsLocal from '../Share/CartsLocal';
 import SaleAPI from '../API/SaleAPI';
+import { useTranslation } from 'react-i18next';
 function Home() {
+    const { t } = useTranslation();
     // state dùng để thay đổi và hiển thị modal
     const [id_modal, set_id_modal] = useState('')
     const [count, set_count] = useState(1)
@@ -95,7 +97,7 @@ function Home() {
                         <div className="text-center p-2">
                             <i className="fa fa-bell fix_icon_bell" style={{ fontSize: '40px', color: '#fff' }}></i>
                         </div>
-                        <h4 className="text-center p-3" style={{ color: '#fff' }}>Bạn Đã Thêm Hàng Thành Công!</h4>
+                        <h4 className="text-center p-3" style={{ color: '#fff' }}>{t("You have successfully added the product")}</h4>
                     </div>
                 </div>
             }
@@ -196,14 +198,14 @@ function Home() {
                                             <div className="single-add-to-cart">
                                                 <form onSubmit={handler_addcart} className="cart-quantity">
                                                     <div className="quantity">
-                                                        <label>Quantity</label>
+                                                        <label>{t("Quantity")}</label>
                                                         <div className="cart-plus-minus">
                                                             <input className="cart-plus-minus-box" value={count} type="text" onChange={(e) => set_count(e.target.value)} />
                                                             <div className="dec qtybutton" onClick={downCount}><i className="fa fa-angle-down"></i></div>
                                                             <div className="inc qtybutton" onClick={upCount}><i className="fa fa-angle-up"></i></div>
                                                         </div>
                                                     </div>
-                                                    <button className="add-to-cart" type="submit">Add to cart</button>
+                                                    <button className="add-to-cart" type="submit">{t("Add to cart")}</button>
                                                 </form>
                                             </div>
                                         </div>

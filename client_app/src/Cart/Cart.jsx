@@ -10,6 +10,7 @@ import CartsLocal from '../Share/CartsLocal';
 import CouponAPI from '../API/CouponAPI';
 import './Cart.css'
 
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -18,14 +19,14 @@ Cart.propTypes = {
 };
 
 function Cart(props) {
-
+    const { t } = useTranslation();
     const dispatch = useDispatch()
     const [coupons, setCoupons] = useState([]);
     const [list_carts, set_list_carts] = useState([])
     const [errorMessage, setErrorMessage] = useState('');
     // state get from redux
     const count_change = useSelector(state => state.Count.isLoad)
-    const [showPendingNotification, setShowPendingNotification] = useState(false);   
+    const [showPendingNotification, setShowPendingNotification] = useState(false);
     const [total_price, set_total_price] = useState(0)
     const [isModalOpen, setIsModalOpen] = useState(false);
     // Hàm này dùng để hiện thị danh sách sản phẩm đã thêm vào giỏ hàng
@@ -75,7 +76,7 @@ function Cart(props) {
         }
 
         console.log(data)
-        
+
 
 
         CartsLocal.updateProduct(data)
@@ -170,12 +171,12 @@ function Cart(props) {
                 }
                 const query = '?' + queryString.stringify(params);
                 const response = await CouponAPI.checkCoupon(query);
-               
+
                 // Handle specific coupon response
                 if (response.msg === 'Mã giảm giá không tồn tại' || response.msg === 'Bạn đã sử dụng mã này rồi' || response.msg === 'Mã giảm giá đã hết hạn') {
                     setErrorCode(true);
                     setErrorMessage(response.msg);
-                   
+
                 } else {
                     localStorage.setItem('id_coupon', response.coupon._id);
                     localStorage.setItem('coupon', JSON.stringify(response.coupon));
@@ -248,7 +249,7 @@ function Cart(props) {
                         <div className="text-center p-2">
                             <i className="fa fa-bell fix_icon_bell" style={{ fontSize: '40px', color: '#fff', backgroundColor: '#f84545' }}></i>
                         </div>
-                        <h4 className="text-center p-3" style={{ color: '#fff' }}>Vui Lòng Kiểm Tra Lại Giỏ Hàng!</h4>
+                        <h4 className="text-center p-3" style={{ color: '#fff' }}>{t("Please check your cart again")}</h4>
                     </div>
                 </div>
             }
@@ -257,8 +258,8 @@ function Cart(props) {
                 <div className="container">
                     <div className="breadcrumb-content">
                         <ul>
-                            <li><Link to="/">Trang chủ</Link></li>
-                            <li className="active">Giỏ hàng</li>
+                            <li><Link to="/">{t("Home")}</Link></li>
+                            <li className="active">{t("Cart")}</li>
                         </ul>
                     </div>
                 </div>
@@ -273,12 +274,12 @@ function Cart(props) {
                                     <table className="table">
                                         <thead>
                                             <tr>
-                                                <th className="li-product-remove">Xóa</th>
-                                                <th className="li-product-thumbnail">Ảnh</th>
-                                                <th className="cart-product-name">Sản phẩm</th>
-                                                <th className="li-product-price">Giá</th>
-                                                <th className="li-product-quantity">Số lượng</th>
-                                                <th className="li-product-subtotal">Tổng cộng</th>
+                                                <th className="li-product-remove">{t("Remove")}</th>
+                                                <th className="li-product-thumbnail">{t("Image")}</th>
+                                                <th className="cart-product-name">{t("Product")}</th>
+                                                <th className="li-product-price">{t("Price")}</th>
+                                                <th className="li-product-quantity">{t("Quantity")}</th>
+                                                <th className="li-product-subtotal">{t("Total")}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -292,7 +293,7 @@ function Cart(props) {
                                                         <td className="li-product-name"><a href="#">{value.name_product}</a></td>
                                                         <td className="li-product-price"><span className="amount">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(value.price_product) + ' VNĐ'}</span></td>
                                                         <td className="quantity">
-                                                            <label>Số lượng</label>
+                                                            <label>{t("Quantity")}</label>
                                                             <div className="cart-plus-minus">
                                                                 <input className="cart-plus-minus-box" value={value.count} type="text" />
                                                                 <div className="dec qtybutton" onClick={() => downCount(value.count, value.id_cart)}><i className="fa fa-angle-down"></i></div>
@@ -310,19 +311,19 @@ function Cart(props) {
                                     <div class="col-12">
                                         <div class="coupon-all">
                                             <div class="coupon">
-                                                <input id="coupon_code" class="input-text" onChange={(e) => set_coupon(e.target.value)} value={coupon} placeholder="Mã giảm giá" type="text" /> &nbsp;
+                                                <input id="coupon_code" class="input-text" onChange={(e) => set_coupon(e.target.value)} value={coupon} placeholder={t("Discount_Code")} type="text" style={{ paddingLeft: '5px' }} /> &nbsp;
                                                 {/* <input class="button" value=" Áp dụng" type="submit" data-toggle="modal" data-target="#exampleModal" /> */}
                                                 {/* onClick={handlerCoupon} */}
 
                                                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal">
-                                                    Xem mã giảm giá
+                                                    {t("View Coupons")}
                                                 </button>
 
                                                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLabel">Danh sách mã giảm giá</h5>
+                                                                <h5 class="modal-title" id="exampleModalLabel">{t("Coupon List")}</h5>
                                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
@@ -330,60 +331,60 @@ function Cart(props) {
                                                             <div class="modal-body">
                                                                 <div className="coupon-list">
                                                                     {coupons && coupons
-                                                                    .filter(coupon => {
-                                                                        // Only show coupons that haven't expired
-                                                                      
-                                                                        return  coupon.status === false||new Date(coupon.end) > new Date();
-                                                                    })
-                                                                    .map((coupon, index) => (
-                                                                        <div key={index} className="coupon-item" style={{
-                                                                            border: '1px solid #ddd',
-                                                                            padding: '10px',
-                                                                            marginBottom: '10px',
-                                                                            borderRadius: '5px',
-                                                                            display: 'flex',
-                                                                            alignItems: 'center'
-                                                                        }}>
-                                                                            <input
-                                                                                type="radio"
-                                                                                name="selectedCoupon"
-                                                                                value={coupon.code}
-                                                                                onChange={() => {
-                                                                                    set_coupon(coupon.code);
-                                                                                    const newDiscount = (total_price * coupon.promotion) / 100;
-                                                                                    setDiscount(newDiscount);
-                                                                                    set_new_price(total_price - newDiscount);
-                                                                                }}
-                                                                                style={{ marginRight: '10px' }}
-                                                                            />
-                                                                            <div>
-                                                                                <div className="coupon-description">
-                                                                                    {coupon.describe}
-                                                                                </div>
-                                                                                <div className="coupon-code" style={{ fontWeight: 'bold' }}>
-                                                                                    Mã: {coupon.code}
-                                                                                </div>
-                                                                                <div className="coupon-discount">
-                                                                                    Giảm giá: {coupon.promotion}%
+                                                                        .filter(coupon => {
+                                                                            // Only show coupons that haven't expired
+
+                                                                            return coupon.status === false || new Date(coupon.end) > new Date();
+                                                                        })
+                                                                        .map((coupon, index) => (
+                                                                            <div key={index} className="coupon-item" style={{
+                                                                                border: '1px solid #ddd',
+                                                                                padding: '10px',
+                                                                                marginBottom: '10px',
+                                                                                borderRadius: '5px',
+                                                                                display: 'flex',
+                                                                                alignItems: 'center'
+                                                                            }}>
+                                                                                <input
+                                                                                    type="radio"
+                                                                                    name="selectedCoupon"
+                                                                                    value={coupon.code}
+                                                                                    onChange={() => {
+                                                                                        set_coupon(coupon.code);
+                                                                                        const newDiscount = (total_price * coupon.promotion) / 100;
+                                                                                        setDiscount(newDiscount);
+                                                                                        set_new_price(total_price - newDiscount);
+                                                                                    }}
+                                                                                    style={{ marginRight: '10px' }}
+                                                                                />
+                                                                                <div>
+                                                                                    <div className="coupon-description">
+                                                                                        {coupon.describe}
+                                                                                    </div>
+                                                                                    <div className="coupon-code" style={{ fontWeight: 'bold' }}>
+                                                                                        {t('Discount_Code')}: {coupon.code}
+                                                                                    </div>
+                                                                                    <div className="coupon-discount">
+                                                                                        {t('Discount_Percentage')}: {coupon.promotion}%
+                                                                                    </div>
+
+                                                                                    <div className="price-preview" style={{ color: 'green' }}>
+                                                                                        {t('Price_After_Discount')}: {new Intl.NumberFormat('vi-VN', {
+                                                                                            style: 'decimal',
+                                                                                            decimal: 'VND'
+                                                                                        }).format(total_price - ((total_price * coupon.promotion) / 100)) + ' VNĐ'}
+                                                                                    </div>
+                                                                                    <div className="coupon-expiration" style={{ color: '#ff6b6b' }}>
+                                                                                        {coupon.end && (
+                                                                                            <>{t('Expiration_Date')}: {new Date(coupon.end).toLocaleDateString('vi-VN')} ({
+                                                                                                Math.ceil((new Date(coupon.end) - new Date()) / (1000 * 60 * 60 * 24))
+                                                                                            } {t('days_left')})</>
+                                                                                        )}
+                                                                                    </div>
                                                                                 </div>
 
-                                                                                <div className="price-preview" style={{ color: 'green' }}>
-                                                                                    Giá sau khi áp dụng: {new Intl.NumberFormat('vi-VN', {
-                                                                                        style: 'decimal',
-                                                                                        decimal: 'VND'
-                                                                                    }).format(total_price - ((total_price * coupon.promotion) / 100)) + ' VNĐ'}
-                                                                                </div>
-                                                                                <div className="coupon-expiration" style={{ color: '#ff6b6b' }}>
-                                                                                {coupon.end && (
-                                                                                    <>Hạn sử dụng: {new Date(coupon.end).toLocaleDateString('vi-VN')} ({
-                                                                                        Math.ceil((new Date(coupon.end) - new Date()) / (1000 * 60 * 60 * 24))
-                                                                                    } ngày còn lại)</>
-                                                                                )}
                                                                             </div>
-                                                                            </div>
-                                                                           
-                                                                        </div>
-                                                                    ))}
+                                                                        ))}
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
@@ -393,14 +394,14 @@ function Cart(props) {
                                                                     onClick={handlerCoupon}
                                                                     data-dismiss="modal"
                                                                 >
-                                                                    Áp dụng mã
+                                                                    {t('Apply_Coupon')}
                                                                 </button>
                                                                 <button
                                                                     type="button"
                                                                     class="btn btn-secondary"
                                                                     data-dismiss="modal"
                                                                 >
-                                                                    Đóng
+                                                                    {t('Close')}
                                                                 </button>
                                                             </div>
 
@@ -416,13 +417,13 @@ function Cart(props) {
                                 <div className="row">
                                     <div className="col-md-5 ml-auto">
                                         <div className="cart-page-total">
-                                            <h2>Tổng cộng</h2>
+                                            <h2>{t('Total')}</h2>
                                             <ul>
-                                                <li>Tổng sản phẩm <span>{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(total_price) + ' VNĐ'}</span></li>
-                                                <li>Giảm giá <span>{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(discount) + ' VNĐ'}</span></li>
-                                                <li>Tổng <span>{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(new_price) + ' VNĐ'}</span></li>
+                                                <li>{t('Total_Products')} <span>{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(total_price) + ' VNĐ'}</span></li>
+                                                <li>{t('Discount')} <span>{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(discount) + ' VNĐ'}</span></li>
+                                                <li>{t('Total')} <span>{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(new_price) + ' VNĐ'}</span></li>
                                             </ul>
-                                            <a style={{ color: '#fff', cursor: 'pointer', fontWeight: '600' }} onClick={handler_checkout}>Tiếp theo</a>
+                                            <a style={{ color: '#fff', cursor: 'pointer', fontWeight: '600' }} onClick={handler_checkout}>{t("Next")}</a>
                                         </div>
                                     </div>
                                 </div>

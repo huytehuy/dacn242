@@ -7,6 +7,7 @@ import './index.css'
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import SaleAPI from '../API/SaleAPI';
+import { useTranslation } from 'react-i18next';
 Imgsearch.propTypes = {
     products: PropTypes.array,
     sort: PropTypes.string
@@ -18,7 +19,7 @@ Imgsearch.defaultProps = {
 }
 
 function Imgsearch(props) {
-
+    const { t } = useTranslation();
     const { sort } = props
     const [products, set_products] = useState([])
     const [page, set_page] = useState(1)
@@ -132,7 +133,7 @@ function Imgsearch(props) {
                                             onClick={handleUpload}
                                             disabled={loading}
                                         >
-                                            {loading ? 'Đang tìm...' : 'Tìm kiếm'}
+                                            {loading ? 'Đang tìm...' : t('Search.')}
                                         </button>
                                     </div>
 
@@ -145,7 +146,7 @@ function Imgsearch(props) {
                                     {/* Hiển thị sản phẩm tìm thấy (đã thay tên biến thành products1) */}
                                     {products1 && (
                                         <div>
-                                            <h3 className="sanpham">Sản phẩm mà bạn muốn tìm kiếm</h3>
+                                            <h3 className="sanpham">{t("You_may_also_like")}</h3>
                                             <div className="shop-products-wrapper">
                                                 <div className="row">
 
@@ -159,7 +160,7 @@ function Imgsearch(props) {
                                                                             <Link to={`/detail/${value._id}`}>
                                                                                 <img src={value.image_url} alt="Li's Product Image" />
                                                                             </Link>
-                                                                            <span className="sticker">Mới</span>
+                                                                            <span className="sticker">{t("New")}</span>
                                                                         </div>
                                                                         <div className="col-lg-5 col-md-7">
                                                                             <div className="product_desc">
@@ -218,7 +219,7 @@ function Imgsearch(props) {
                                                             ))
                                                         ) : (
                                                             <div className="upload-container1">
-                                                                <p>Không có sản phẩm nào được tìm thấy.</p>
+                                                                <p>{t("No_products_found")}</p>
                                                             </div>
                                                         )}
 

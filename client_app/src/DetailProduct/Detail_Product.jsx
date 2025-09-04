@@ -8,8 +8,9 @@ import { Link } from 'react-router-dom';
 import CommentAPI from '../API/CommentAPI';
 import CartsLocal from '../Share/CartsLocal';
 import SaleAPI from '../API/SaleAPI';
-
+import { useTranslation } from 'react-i18next';
 function Detail_Product() {
+    const { t } = useTranslation();
     const { id } = useParams()
     const [product, set_product] = useState({})
     const [Loading, set_Loading] = useState(false);
@@ -213,7 +214,7 @@ function Detail_Product() {
                         <div className="text-center p-2">
                             <i className="fa fa-check fix_icon_bell" style={{ fontSize: '40px', color: '#fff' }}></i>
                         </div>
-                        <h4 className="text-center p-3" style={{ color: '#fff' }}>Bình luận của bạn đang được duyệt!</h4>
+                        <h4 className="text-center p-3" style={{ color: '#fff' }}>{t('Your_comment_is_being_approved')}</h4>
                     </div>
                 </div>
             }
@@ -224,7 +225,7 @@ function Detail_Product() {
                         <div className="text-center p-2">
                             <i className="fa fa-bell fix_icon_bell" style={{ fontSize: '40px', color: '#fff' }}></i>
                         </div>
-                        <h4 className="text-center p-3" style={{ color: '#fff' }}>Bạn Đã Thêm Hàng Thành Công!</h4>
+                        <h4 className="text-center p-3" style={{ color: '#fff' }}>{t('You_have_successfully_added_the_product')}</h4>
                     </div>
                 </div>
             }
@@ -235,7 +236,7 @@ function Detail_Product() {
                         <div className="text-center p-2">
                             <i className="fa fa-bell fix_icon_bell" style={{ fontSize: '40px', color: '#fff', backgroundColor: '#f84545' }}></i>
                         </div>
-                        <h4 className="text-center p-3" style={{ color: '#fff' }}>Vui Lòng Kiểm Tra Lại Đăng Nhập!</h4>
+                        <h4 className="text-center p-3" style={{ color: '#fff' }}>{t('Please_check_your_login_information')}</h4>
                     </div>
                 </div>
             }
@@ -243,7 +244,7 @@ function Detail_Product() {
                 <div className="container">
                     <div className="breadcrumb-content">
                         <ul>
-                            <li><Link to="/">Trang chủ</Link></li>
+                            <li><Link to="/">{t('Home')}</Link></li>
                             <li className="active">{product.name_product}</li>
 
                         </ul>
@@ -270,10 +271,10 @@ function Detail_Product() {
                                     <h2>{product.name_product}</h2>
                                     <div style={{ display: 'inline-block' }}>
                                         {product.depository === 0 ? (
-                                            <span style={{ color: 'red' }}>Hết hàng</span>
+                                            <span style={{ color: 'red' }}>{t('out_of_stock')}</span>
                                         ) : (
                                             <>
-                                                <label style={{ display: 'inline-block', marginRight: '10px' }}>Kho:</label>
+                                                <label style={{ display: 'inline-block', marginRight: '10px' }}>{t('Storage')}:</label>
                                                 <div className="active" style={{ display: 'inline-block' }}>
                                                     {product.depository}
                                                 </div>
@@ -300,7 +301,7 @@ function Detail_Product() {
                                     </div>
 
                                     <div className="average-rating mb-15">
-                                        <span style={{ marginRight: '10px' }}>Đánh giá trung bình: </span>
+                                        <span style={{ marginRight: '10px' }}>{t('Average_rating')}: </span>
                                         <div style={{ display: 'inline-block' }}>
                                             <ul className="rating d-inline-block">
                                                 <li><i className={averageRating >= 1 ? 'fa fa-star' : averageRating >= 0.5 ? 'fa fa-star-half-o' : 'fa fa-star-o'}></i></li>
@@ -313,7 +314,7 @@ function Detail_Product() {
                                                 {averageRating.toFixed(1)}/5
                                             </span>
                                             <span style={{ marginLeft: '10px' }}>
-                                                ({list_comment.length} đánh giá)
+                                                ({list_comment.length} {t('Reviews')})
                                             </span>
                                         </div>
                                     </div>
@@ -323,14 +324,14 @@ function Detail_Product() {
                                             {product.depository !== 0 && (
                                                 <>
                                                     <div className="quantity">
-                                                        <label>Số lượng:</label>
+                                                        <label>{t('Quantity')}</label>
                                                         {existingCartCount > 0 && (
                                                             <div style={{
                                                                 color: '#666',
                                                                 fontSize: '14px',
                                                                 marginBottom: '5px'
                                                             }}>
-                                                                Bạn đã có {existingCartCount} sản phẩm trong giỏ hàng
+                                                                {t('You have')} {existingCartCount} {t('in your shopping cart')}
                                                             </div>
                                                         )}
                                                         <div className="cart-plus-minus">
@@ -353,7 +354,7 @@ function Detail_Product() {
                                                                 fontSize: '14px',
                                                                 marginTop: '5px'
                                                             }}>
-                                                                Số lượng bạn mua đã vượt quá số lượng trong kho
+                                                                {t('Exceeding_the_number_of_products_in_stock')}
                                                             </div>
                                                         )}
                                                     </div>
@@ -363,7 +364,7 @@ function Detail_Product() {
                                                         type="submit"
                                                         onClick={handler_addcart}
                                                     >
-                                                        Thêm vào giỏ hàng
+                                                        {t('Add_to_cart')}
                                                     </a>
                                                 </>
                                             )}
@@ -381,8 +382,8 @@ function Detail_Product() {
                         <div className="col-lg-12">
                             <div className="li-product-tab">
                                 <ul className="nav li-product-menu">
-                                    <li><a className="active" data-toggle="tab" href="#description"><span>Mô tả</span></a></li>
-                                    <li><a data-toggle="tab" href="#reviews"><span>Đánh giá</span></a></li>
+                                    <li><a className="active" data-toggle="tab" href="#description"><span>{t('Descr')}</span></a></li>
+                                    <li><a data-toggle="tab" href="#reviews"><span>{t('Reviews')}</span></a></li>
 
 
                                 </ul>
@@ -420,13 +421,13 @@ function Detail_Product() {
                                     </div>
 
                                     <div className="review-btn" style={{ marginTop: '2rem' }}>
-                                        <a className="review-links" style={{ cursor: 'pointer', color: '#fff' }} onClick={() => set_modal(true)}>Viết đánh giá của bạn!</a>
+                                        <a className="review-links" style={{ cursor: 'pointer', color: '#fff' }} onClick={() => set_modal(true)}>{t('Write_a_review')}</a>
                                     </div>
                                     <Modal onHide={() => set_modal(false)} show={modal} className="modal fade modal-wrapper">
                                         <div className="modal-dialog modal-dialog-centered" role="document">
                                             <div className="modal-content">
                                                 <div className="modal-body">
-                                                    <h3 className="review-page-title">Viết đánh giá</h3>
+                                                    <h3 className="review-page-title">{t('Write_a_review')}</h3>
                                                     <div className="modal-inner-area row">
                                                         <div className="col-lg-6">
                                                             <div className="li-review-product">
@@ -443,10 +444,10 @@ function Detail_Product() {
                                                             <div className="li-review-content">
                                                                 <div className="feedback-area">
                                                                     <div className="feedback">
-                                                                        <h3 className="feedback-title">Phản hồi</h3>
+                                                                        <h3 className="feedback-title">{t('Feedback')}</h3>
                                                                         <form action="#">
                                                                             <p className="your-opinion">
-                                                                                <label>Đánh giá</label>
+                                                                                <label>{t('Reviews')}</label>
                                                                                 <span>
                                                                                     <select className="star-rating" onChange={(e) => set_star(e.target.value)}>
                                                                                         <option value="1">1</option>
@@ -458,16 +459,16 @@ function Detail_Product() {
                                                                                 </span>
                                                                             </p>
                                                                             <p className="feedback-form">
-                                                                                <label htmlFor="feedback">Đánh giá của bạn</label>
+                                                                                <label htmlFor="feedback">{t('Your_Review')}</label>
                                                                                 <textarea id="feedback" name="comment" cols="45" rows="8" aria-required="true" onChange={(e) => set_comment(e.target.value)}></textarea>
                                                                                 {
-                                                                                    validation_comment && <span style={{ color: 'red' }}>* Vui lòng nhập đánh giá!</span>
+                                                                                    validation_comment && <span style={{ color: 'red' }}>* {t('Please_type_your_feedback')}</span>
                                                                                 }
                                                                             </p>
                                                                             <div className="feedback-input">
                                                                                 <div className="feedback-btn pb-15">
-                                                                                    <a className="close" onClick={() => set_modal(false)}>Đóng</a>
-                                                                                    <a style={{ cursor: 'pointer' }} onClick={handler_Comment}>Gửi</a>
+                                                                                    <a className="close" onClick={() => set_modal(false)}>{t('Close')}</a>
+                                                                                    <a style={{ cursor: 'pointer' }} onClick={handler_Comment}>{t('Submit')}</a>
                                                                                 </div>
                                                                             </div>
                                                                         </form>

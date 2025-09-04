@@ -5,6 +5,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import SaleAPI from '../../API/SaleAPI';
+import { useTranslation } from 'react-i18next';
 
 Home_Category.propTypes = {
     GET_id_modal: PropTypes.func
@@ -13,6 +14,7 @@ Home_Category.defaultProps = {
     GET_id_modal: null
 }
 function Home_Category(props) {
+    const { t } = useTranslation();
     var settings = {
         dots: false,
         infinite: true,
@@ -64,7 +66,7 @@ function Home_Category(props) {
                     <div className="col-lg-12">
                         <div className="li-product-tab">
                             <ul className="nav li-product-menu">
-                                <li><a className="active" data-toggle="tab" href="#"><span>Khuyến mãi</span></a></li>
+                                <li><a className="active" data-toggle="tab" href="#"><span>{t('Sales')}</span></a></li>
                             </ul>
                         </div>
                     </div>

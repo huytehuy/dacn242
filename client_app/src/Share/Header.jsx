@@ -6,7 +6,6 @@ import User from '../API/User';
 import logo from '../Image/logo_ecommerce_website_806.jpg'
 import { changeCount } from '../Redux/Action/ActionCount';
 import { addSession, deleteSession } from '../Redux/Action/ActionSession';
-import queryString from 'query-string'
 import Product from '../API/Product';
 import { addSearch } from '../Redux/Action/ActionSearch';
 import CartsLocal from './CartsLocal';
@@ -17,6 +16,11 @@ import './styles.css';
 import SaleAPI from '../API/SaleAPI';
 import axios from "axios";
 import { jwtDecode } from 'jwt-decode'
+import { useTranslation } from 'react-i18next';
+import "/node_modules/flag-icons/css/flag-icons.min.css";
+import flagVN from '../Image/vietnam.png'; // Thêm ảnh cờ Việt Nam
+import flagUS from '../Image/en.jpg'; // Thêm ảnh cờ Mỹ
+
 
 function Header(props) {
     // State count of cart
@@ -24,7 +28,10 @@ function Header(props) {
     const [total_price, set_total_price] = useState(0)
     const [promotion, set_promotion] = useState(0)
     const [carts_mini, set_carts_mini] = useState([])
-
+    const { t, i18n } = useTranslation();
+    const handleChangeLanguage = (lng) => {
+        i18n.changeLanguage(lng);
+    };
     // Hàm này để khởi tạo localStorage dùng để lưu trữ giỏ hàng
     // Và nó sẽ chạy lần đầu
     useEffect(() => {
@@ -133,7 +140,7 @@ function Header(props) {
     useEffect(() => {
         const fetchData = async () => {
             const response = await Product.Get_All_Product()
-           
+
             set_products(response)
         }
         fetchData()
@@ -159,8 +166,8 @@ function Header(props) {
             const productName = (value?.name_product || '').toUpperCase();
             const productCategory = (value?.id_category?.category || '').toUpperCase();
             const searchTerms = keyword_search.toUpperCase().trim().split(/\s+/);
-             // Check if ALL search terms are found in either the product name OR category
-            return searchTerms.every(term => 
+            // Check if ALL search terms are found in either the product name OR category
+            return searchTerms.every(term =>
                 productName.includes(term) || productCategory.includes(term)
             );
         })
@@ -274,7 +281,7 @@ function Header(props) {
                         </div>
                         {!isMobile && <div className="col-lg-9 pl-0 ml-sm-15 ml-xs-15 d-flex justify-content-between align-items-center">
                             <form action="/search" className="hm-searchbox" style={{ width: "50px" }} onSubmit={handler_search}>
-                                <input type="text" placeholder="Tìm kiếm ..." value={keyword_search} onChange={(e) => { set_keyword_search(e.target.value); setSearchVisible(true) }} />
+                                <input type="text" placeholder={t('Search.')} value={keyword_search} onChange={(e) => { set_keyword_search(e.target.value); setSearchVisible(true) }} />
                                 <button className="li-btn" type="submit"><i className="fa fa-search"></i></button>
 
                                 {isSearchVisible &&
@@ -363,10 +370,10 @@ function Header(props) {
                                                             ))
                                                         }
                                                     </ul>
-                                                    <p className="minicart-total">TỔNG CỘNG: <span>{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(total_price) + ' VNĐ'}</span></p>
+                                                    <p className="minicart-total">{t("Total")}: <span>{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(total_price) + ' VNĐ'}</span></p>
                                                     <div className="minicart-button">
                                                         <Link to="/cart" className="li-button li-button-fullwidth li-button-dark">
-                                                            <span>Xem toàn bộ giỏ hàng</span>
+                                                            <span>{t("View cart")}</span>
                                                         </Link>
                                                     </div>
                                                 </div>
@@ -380,20 +387,50 @@ function Header(props) {
                 </div>
 
                 <div className={header_navbar}>
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center',position: 'absolute', right: '10px', top: '5px' }}>
+                                <span style={{ cursor: 'pointer' }} onClick={() => handleChangeLanguage('vi')}>
+                                    <img
+                                        src={flagVN}
+                                        alt="Vietnamese"
+                                        style={{
+                                            width: 40,
+                                            height: 40,
+                                            border: i18n.language === 'vi' ? '2px solid #007bff' : '2px solid transparent',
+                                            borderRadius: '50%',
+                                            boxSizing: 'border-box',
+                                            objectFit: 'cover'
+                                        }}
+                                    />
+                                </span>
+                                <span style={{ cursor: 'pointer' }} onClick={() => handleChangeLanguage('en')}>
+                                    <img
+                                        src={flagUS}
+                                        alt="English"
+                                        style={{
+                                            width: 40,
+                                            height: 40,
+                                            border: i18n.language === 'en' ? '2px solid #007bff' : '2px solid transparent',
+                                            borderRadius: '50%',
+                                            boxSizing: 'border-box',
+                                            objectFit: 'cover'
+                                        }}
+                                    />
+                                </span>
+                            </div>
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-12">
                                 <div className="hb-menu" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <nav>
                                         <ul>
-
-                                            <li className="dropdown-holder"><Link to="/">TRANG CHỦ</Link></li>
-                                            <li className="megamenu-holder"><Link to="/shop/all">DANH MỤC</Link>
+                                            <li className="dropdown-holder"><Link to="/">{t('Home')}</Link></li>
+                                            <li className="megamenu-holder"><Link to="/shop/all">{t('Category')}</Link>
                                             </li>
-                                            <li><Link to="/event">SỰ KIỆN</Link></li>
-                                            <li><Link to="/contact">LIÊN HỆ</Link></li>
+                                            <li><Link to="/event">{t('Event')}</Link></li>
+                                            <li><Link to="/contact">{t('Contact')}</Link></li>
                                         </ul>
                                     </nav>
+                                    
                                     <div >
                                         <div className="d-flex justify-content-end username" onClick={toggleUserVisibility} style={{ position: 'relative', cursor: 'pointer' }}>
                                             <div>
@@ -404,7 +441,7 @@ function Header(props) {
                                                         <div className="hb-menu">
                                                             <nav>
                                                                 <ul>
-                                                                    <li onClick={() => handleSignInClick()}>ĐĂNG NHẬP</li>
+                                                                    <li style={{ textTransform: 'uppercase' }} onClick={() => handleSignInClick()}>{t('Login')}</li>
                                                                 </ul>
                                                             </nav>
                                                         </div>
@@ -416,9 +453,9 @@ function Header(props) {
                                                 (
                                                     <div className="ul_setting" ref={userRef}>
                                                         <ul style={{ width: 100 }} className='dropdown' >
-                                                            <li className="li_setting"><Link to={`/profile/${user._id}`} className="li_setting">Trang cá nhân</Link></li>
-                                                            <li className="li_setting"><Link to="/history" className="li_setting">Tinh trạng đặt hàng</Link></li>
-                                                            <li className="li_setting"><a onClick={handler_logout}>Đăng xuất</a></li>
+                                                            <li className="li_setting"><Link to={`/profile/${user._id}`} className="li_setting">{t('Profile')}</Link></li>
+                                                            <li className="li_setting"><Link to="/history" className="li_setting">{t('Order_Status')}</Link></li>
+                                                            <li className="li_setting"><a onClick={handler_logout}>{t('Logout')}</a></li>
                                                         </ul>
                                                     </div>
                                                 )}
