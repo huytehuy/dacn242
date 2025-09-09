@@ -73,7 +73,8 @@ function Header(props) {
 
         const fetchData = async () => {
             try {
-                const token = localStorage.getItem('jwt')
+                const token = localStorage.getItem('jwt');
+                if (!token) return; // Nếu không có token thì không decode
                 const decoded = jwtDecode(token);
                 const response = await User.Get_User(decoded.id)
                 if (mounted) {
@@ -243,7 +244,7 @@ function Header(props) {
         }
 
         const formData = new FormData();
-        formData.append('image', file);
+        formData.append('file', file);
 
         try {
             setLoading(true);
@@ -327,48 +328,47 @@ function Header(props) {
                                     </div>
                                 }
                             </form>
-                            {/* <div className="hm-searchbox1" onSubmit={handler_search}> 
-
+                            <div className="hm-searchbox1" onSubmit={handler_search}>
                                 <Link to={`/imgSearch`}  ><button className="li-btn" type="submit"><i className="fa fa-camera"></i></button>/</Link>
-
-
-                            </div> */}
+                            </div>
 
                             <div className="ml-15 header-middle-right d-flex justify-content-between align-items-center" onClick={toggleCartVisibility}>
                                 <ul className="hm-menu d-flex justify-content-between align-items-center">
                                     <li className="hm-wishlist d-flex justify-content-between align-items-center">
-                                        <li className="hm-minicart d-flex">
+                                        <div className="hm-minicart d-flex">
                                             <div className="hm-minicart-trigger"
                                                 data-toggle="collapse"
                                                 data-target="#collapse_carts"
                                                 aria-expanded="false"
                                                 aria-controls="collapse_carts">
                                                 <span className="item-icon"></span>
-                                                <span className="item-text">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(total_price) + ' VNĐ'}
+                                                <span className="item-text">
+                                                    {new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(total_price) + ' VNĐ'}
                                                     <span className="cart-item-count">{count_cart}</span>
                                                 </span>
                                             </div>
                                             <span></span>
-
                                             {isCartVisible && (
                                                 <div className="minicart" ref={cartRef}>
                                                     <ul className="minicart-product-list">
-                                                        {
-                                                            carts_mini && carts_mini.map((value, index) => (
-                                                                <li key={index}>
-                                                                    <Link to={`/detail/${value.id_product}`} className="minicart-product-image">
-                                                                        <img src={value.image} alt="cart products" />
-                                                                    </Link>
-                                                                    <div className="minicart-product-details">
-                                                                        <h6><Link to={`/detail/${value.id_product}`}>{value.name_product}</Link></h6>
-                                                                        <span>{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(value.price_product) + ' VNĐ'} x {value.count}</span>
-                                                                    </div>
-                                                                    <a className="close" onClick={() => handler_delete_mini(value.id_cart)}>
-                                                                        <i className="fa fa-close"></i>
-                                                                    </a>
-                                                                </li>
-                                                            ))
-                                                        }
+                                                        {carts_mini && carts_mini.map((value, index) => (
+                                                            <li key={index}>
+                                                                <Link to={`/detail/${value.id_product}`} className="minicart-product-image">
+                                                                    <img src={value.image} alt="cart products" />
+                                                                </Link>
+                                                                <div className="minicart-product-details">
+                                                                    <h6>
+                                                                        <Link to={`/detail/${value.id_product}`}>{value.name_product}</Link>
+                                                                    </h6>
+                                                                    <span>
+                                                                        {new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(value.price_product) + ' VNĐ'} x {value.count}
+                                                                    </span>
+                                                                </div>
+                                                                <a className="close" onClick={() => handler_delete_mini(value.id_cart)}>
+                                                                    <i className="fa fa-close"></i>
+                                                                </a>
+                                                            </li>
+                                                        ))}
                                                     </ul>
                                                     <p className="minicart-total">{t("Total")}: <span>{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(total_price) + ' VNĐ'}</span></p>
                                                     <div className="minicart-button">
@@ -378,7 +378,7 @@ function Header(props) {
                                                     </div>
                                                 </div>
                                             )}
-                                        </li>
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -387,36 +387,36 @@ function Header(props) {
                 </div>
 
                 <div className={header_navbar}>
-                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center',position: 'absolute', right: '10px', top: '5px' }}>
-                                <span style={{ cursor: 'pointer' }} onClick={() => handleChangeLanguage('vi')}>
-                                    <img
-                                        src={flagVN}
-                                        alt="Vietnamese"
-                                        style={{
-                                            width: 40,
-                                            height: 40,
-                                            border: i18n.language === 'vi' ? '2px solid #007bff' : '2px solid transparent',
-                                            borderRadius: '50%',
-                                            boxSizing: 'border-box',
-                                            objectFit: 'cover'
-                                        }}
-                                    />
-                                </span>
-                                <span style={{ cursor: 'pointer' }} onClick={() => handleChangeLanguage('en')}>
-                                    <img
-                                        src={flagUS}
-                                        alt="English"
-                                        style={{
-                                            width: 40,
-                                            height: 40,
-                                            border: i18n.language === 'en' ? '2px solid #007bff' : '2px solid transparent',
-                                            borderRadius: '50%',
-                                            boxSizing: 'border-box',
-                                            objectFit: 'cover'
-                                        }}
-                                    />
-                                </span>
-                            </div>
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center', position: 'absolute', right: '10px', top: '5px' }}>
+                        <span style={{ cursor: 'pointer' }} onClick={() => handleChangeLanguage('vi')}>
+                            <img
+                                src={flagVN}
+                                alt="Vietnamese"
+                                style={{
+                                    width: 40,
+                                    height: 40,
+                                    border: i18n.language === 'vi' ? '2px solid #007bff' : '2px solid transparent',
+                                    borderRadius: '50%',
+                                    boxSizing: 'border-box',
+                                    objectFit: 'cover'
+                                }}
+                            />
+                        </span>
+                        <span style={{ cursor: 'pointer' }} onClick={() => handleChangeLanguage('en')}>
+                            <img
+                                src={flagUS}
+                                alt="English"
+                                style={{
+                                    width: 40,
+                                    height: 40,
+                                    border: i18n.language === 'en' ? '2px solid #007bff' : '2px solid transparent',
+                                    borderRadius: '50%',
+                                    boxSizing: 'border-box',
+                                    objectFit: 'cover'
+                                }}
+                            />
+                        </span>
+                    </div>
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-12">
@@ -430,7 +430,7 @@ function Header(props) {
                                             <li><Link to="/contact">{t('Contact')}</Link></li>
                                         </ul>
                                     </nav>
-                                    
+
                                     <div >
                                         <div className="d-flex justify-content-end username" onClick={toggleUserVisibility} style={{ position: 'relative', cursor: 'pointer' }}>
                                             <div>

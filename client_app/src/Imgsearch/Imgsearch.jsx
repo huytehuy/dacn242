@@ -88,7 +88,7 @@ function Imgsearch(props) {
         }
 
         const formData = new FormData();
-        formData.append('image', file);
+        formData.append('file', file);
 
         try {
             setLoading(true);
@@ -144,94 +144,95 @@ function Imgsearch(props) {
                                     </button> */}
 
                                     {/* Hiển thị sản phẩm tìm thấy (đã thay tên biến thành products1) */}
-                                    {products1 && (
-                                        <div>
-                                            <h3 className="sanpham">{t("You_may_also_like")}</h3>
-                                            <div className="shop-products-wrapper">
-                                                <div className="row">
-
-                                                    <div className="col">
-
-                                                        {products1 && products1.length > 0 ? (
-                                                            products1 && products1.map(value => (
-                                                                <Link to={`/detail/${value._id}`} key={value._id}>
-                                                                    <div className="row product-layout-list">
-                                                                        <div className="product-image">
-                                                                            <Link to={`/detail/${value._id}`}>
-                                                                                <img src={value.image_url} alt="Li's Product Image" />
-                                                                            </Link>
-                                                                            <span className="sticker">{t("New")}</span>
-                                                                        </div>
-                                                                        <div className="col-lg-5 col-md-7">
-                                                                            <div className="product_desc">
-                                                                                <div className="product_desc_info">
-                                                                                    <div className="product-review">
-                                                                                        <h5 className="manufacturer">{value.name_product}</h5>
-                                                                                        <div className="rating-box">
-                                                                                            <ul className="rating">
-                                                                                                <li><i className="fa fa-star" /></li>
-                                                                                                <li><i className="fa fa-star" /></li>
-                                                                                                <li><i className="fa fa-star" /></li>
-                                                                                                <li><i className="fa fa-star" /></li>
-                                                                                                <li><i className="fa fa-star" /></li>
-                                                                                            </ul>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <h4>{value.name_product}</h4>
-                                                                                    <div className="price-box">
-                                                                                        {/* <span className="new-price">{new Intl.NumberFormat('vi-VN',{style: 'decimal',decimal: 'VND'}).format(value.price_product)+ ' VNĐ'}</span> */}
-                                                                                        {
-                                                                                            (() => {
-                                                                                                const index = product_category.findIndex(obj => {
-                                                                                                    return Object.keys(obj.id_product).some(key => obj.id_product[key] === value._id);
-                                                                                                });
-
-                                                                                                if (index !== -1) {
-                                                                                                    return (
-                                                                                                        <>
-                                                                                                            <del className="new-price">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(product_category[index].id_product?.price_product) + ' VNĐ'}</del>
-                                                                                                            <br />
-                                                                                                            <span className="new-price" style={{ color: 'red' }}>
-                                                                                                                {new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' })
-                                                                                                                    .format(parseInt(product_category[index].id_product?.price_product) - ((parseInt(product_category[index].id_product?.price_product) * parseInt(product_category[index].promotion)) / 100)) + ' VNĐ'}
-                                                                                                            </span>
-
-                                                                                                        </>
-                                                                                                    );
-                                                                                                } else {
-                                                                                                    return <span className="price_product_search" style={{ color: 'black' }}>{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(value.price_product) + ' VNĐ'}</span>;
-                                                                                                }
-                                                                                            })()
-                                                                                        }
-                                                                                    </div>
-                                                                                    <p>
-                                                                                        {value.describe}
-
-                                                                                    </p>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="col-lg-4">
-                                                                            {/* Thêm các phần tử cần thiết trong cột này nếu có */}
-                                                                        </div>
+                                    {products1 && products1.length > 0 ? (
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                flexWrap: 'wrap',
+                                                gap: '24px',
+                                                justifyContent: 'flex-start'
+                                            }}
+                                        >
+                                            {products1.map(value => (
+                                                <div
+                                                    key={value._id}
+                                                    className="product-layout-list"
+                                                    style={{
+                                                        flex: '1 1 300px',
+                                                        maxWidth: '300px',
+                                                        minWidth: '250px',
+                                                        background: '#fff',
+                                                        borderRadius: '8px',
+                                                        boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                                                        marginBottom: '24px',
+                                                        padding: '16px',
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        alignItems: 'center'
+                                                    }}
+                                                >
+                                                    <Link to={`/detail/${value._id}`} style={{ width: '100%', textDecoration: 'none', color: 'inherit' }}>
+                                                        <div className="product-image" style={{ width: '100%', textAlign: 'center' }}>
+                                                            <img
+                                                                src={value.image_url}
+                                                                alt="Li's Product Image"
+                                                                style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '6px' }}
+                                                            />
+                                                            <span className="sticker">{t("New")}</span>
+                                                        </div>
+                                                        <div className="product_desc" style={{ width: '100%', marginTop: '12px' }}>
+                                                            <div className="product_desc_info">
+                                                                <div className="product-review">
+                                                                    <h5 className="manufacturer">{value.name_product}</h5>
+                                                                    <div className="rating-box">
+                                                                        <ul className="rating" style={{ padding: 0, margin: 0, listStyle: 'none', display: 'flex' }}>
+                                                                            {[...Array(5)].map((_, i) => (
+                                                                                <li key={i}><i className="fa fa-star" /></li>
+                                                                            ))}
+                                                                        </ul>
                                                                     </div>
-                                                                </Link>
-                                                            ))
-                                                        ) : (
-                                                            <div className="upload-container1">
-                                                                <p>{t("No_products_found")}</p>
-                                                            </div>
-                                                        )}
+                                                                </div>
+                                                                <h4>{value.name_product}</h4>
+                                                                <div className="price-box">
+                                                                    {
+                                                                        (() => {
+                                                                            const index = product_category.findIndex(obj => {
+                                                                                return Object.keys(obj.id_product).some(key => obj.id_product[key] === value._id);
+                                                                            });
 
-                                                    </div>
+                                                                            if (index !== -1) {
+                                                                                return (
+                                                                                    <>
+                                                                                        <del className="new-price">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(product_category[index].id_product?.price_product) + ' VNĐ'}</del>
+                                                                                        <br />
+                                                                                        <span className="new-price" style={{ color: 'red' }}>
+                                                                                            {new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' })
+                                                                                                .format(parseInt(product_category[index].id_product?.price_product) - ((parseInt(product_category[index].id_product?.price_product) * parseInt(product_category[index].promotion)) / 100)) + ' VNĐ'}
+                                                                                        </span>
+                                                                                    </>
+                                                                                );
+                                                                            } else {
+                                                                                return <span className="price_product_search" style={{ color: 'black' }}>{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(value.price_product) + ' VNĐ'}</span>;
+                                                                            }
+                                                                        })()
+                                                                    }
+                                                                </div>
+                                                                <p>{value.describe}</p>
+                                                            </div>
+                                                        </div>
+                                                    </Link>
                                                 </div>
-                                            </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="upload-container1" style={{ width: '100%' }}>
+                                            <p>{t("No_products_found")}</p>
                                         </div>
                                     )}
-
-                                    {/* Hiển thị lỗi nếu có */}
-                                    {error && <div style={{ color: 'red' }}>{error}</div>}
                                 </div>
+
+                                {/* Hiển thị lỗi nếu có */}
+                                {error && <div style={{ color: 'red' }}>{error}</div>}
                             </div>
                         </div>
                     </div>

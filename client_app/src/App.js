@@ -8,6 +8,7 @@ import "./CSS/slick.css";
 import "./CSS/venobox.css";
 import "./CSS/style.css";
 import "./App.css";
+import ChatBox from "./ChatBox/ChatBox";
 
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Header from "./Share/Header";
@@ -161,6 +162,7 @@ function App() {
           </Switch>
         </Suspense>
         <Footer />
+        <ChatBox />
       </BrowserRouter>
     </div>
   );

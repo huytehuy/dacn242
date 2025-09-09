@@ -86,7 +86,7 @@ function Search(props) {
         }
 
         const formData = new FormData();
-        formData.append('image', file);
+        formData.append('file', file);
 
         try {
             setLoading(true);
