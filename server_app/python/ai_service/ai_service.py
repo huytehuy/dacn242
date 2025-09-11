@@ -18,9 +18,12 @@ from fastapi.staticfiles import StaticFiles
 app = FastAPI(title="E-commerce AI Service (Visual Search + Product Q&A)")
 text_model_name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 text_model = SentenceTransformer(text_model_name)
+PRODUCT_IMG_DIR = "/opt/dacn242/server_app/python/ai_service/products_images"
+TEXT_INDEX_PATH = "/opt/dacn242/server_app/python/ai_service/product_text.index"
+TEXT_META_PATH = "/opt/dacn242/server_app/python/ai_service/product_text_meta.pkl"
 
-TEXT_INDEX_PATH = "python/ai_service/product_text.index"
-TEXT_META_PATH  = "python/ai_service/product_text_meta.pkl"
+# TEXT_INDEX_PATH = "python/ai_service/product_text.index"
+# TEXT_META_PATH  = "python/ai_service/product_text_meta.pkl"
 app.mount("/products_images", StaticFiles(directory="python/ai_service/products_images"), name="products_images")
 
 # Thêm đoạn này ngay sau khi tạo app
@@ -68,7 +71,7 @@ img_transform = transforms.Compose([
     transforms.ToTensor()
 ])
 
-PRODUCT_IMG_DIR =  "python/ai_service/products_images"
+# PRODUCT_IMG_DIR =  "python/ai_service/products_images"
 
 img_embeddings = []
 img_ids = []
@@ -77,10 +80,14 @@ if os.path.isdir(PRODUCT_IMG_DIR):
     for file in os.listdir(PRODUCT_IMG_DIR):
         if file.lower().endswith((".jpg", ".jpeg", ".png", ".webp")):
             path = os.path.join(PRODUCT_IMG_DIR, file)
-            with Image.open(path) as im:
-                emb = clip_model.encode([im], convert_to_tensor=False, normalize_embeddings=True)
-                img_embeddings.append(emb[0])
-                img_ids.append(file)
+            try:
+                with Image.open(path) as im:
+                    emb = clip_model.encode([im], convert_to_tensor=False, normalize_embeddings=True)
+                    img_embeddings.append(emb[0])
+                    img_ids.append(file)
+                    print(f"Loaded image: {file}")
+            except Exception as e:
+                print(f"Error loading image {file}: {str(e)}")
 
 if img_embeddings:
     img_embeddings = np.array(img_embeddings).astype("float32")
