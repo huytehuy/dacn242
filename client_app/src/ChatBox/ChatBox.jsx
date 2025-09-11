@@ -93,7 +93,11 @@ function ChatBox() {
                                         <img src={msg.product.image} alt={msg.product.name} style={{ maxWidth: 180, borderRadius: 8, marginBottom: 6 }} />
                                     )}
                                     <div style={{ fontWeight: "bold" }}>{msg.product.name}</div>
-                                    {msg.product.price && <div>Giá: {msg.product.price}</div>}
+                                    {msg.product.price && (
+                                        <div>
+                                            Giá: {new Intl.NumberFormat('vi-VN').format(msg.product.price)} VNĐ
+                                        </div>
+                                    )}
                                     {msg.product.url && (
                                         <div>
                                             <a href={msg.product.url} target="_blank" rel="noopener noreferrer" style={{ color: "#007bff" }}>
@@ -110,6 +114,11 @@ function ChatBox() {
                         </span>
                     </div>
                 ))}
+                {loading && (
+                    <div style={{ color: "#888", fontStyle: "italic", margin: "8px 0" }}>
+                        Đang lấy dữ liệu sản phẩm...
+                    </div>
+                )}
                 <div ref={chatEndRef} />
             </div>
             <form onSubmit={sendMessage} style={{ display: "flex", borderTop: "1px solid #eee" }}>

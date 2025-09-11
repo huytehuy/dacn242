@@ -13,11 +13,14 @@ import faiss
 import numpy as np
 from PIL import Image
 from torchvision import transforms
-import requests
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 app = FastAPI(title="E-commerce AI Service (Visual Search + Product Q&A)")
+text_model_name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+text_model = SentenceTransformer(text_model_name)
 
+TEXT_INDEX_PATH = "python/ai_service/product_text.index"
+TEXT_META_PATH  = "python/ai_service/product_text_meta.pkl"
 app.mount("/products_images", StaticFiles(directory="python/ai_service/products_images"), name="products_images")
 
 # Thêm đoạn này ngay sau khi tạo app
@@ -39,6 +42,7 @@ class ProductItem(BaseModel):
     price: Optional[str] = None
     warranty: Optional[str] = None
     url: Optional[str] = None
+    image: Optional[str] = None
     # bạn có thể thêm các field khác tùy DB
 
 class IngestPayload(BaseModel):
@@ -64,7 +68,7 @@ img_transform = transforms.Compose([
     transforms.ToTensor()
 ])
 
-PRODUCT_IMG_DIR = os.getenv("PRODUCT_IMG_DIR", "products_images")
+PRODUCT_IMG_DIR =  "python/ai_service/products_images"
 
 img_embeddings = []
 img_ids = []
@@ -115,7 +119,7 @@ def find_products_by_labels(predictions):
                     "name_product": product.get("name_product", ""),
                     "description": product.get("description", ""),
                     "price_product": product.get("price_product", 0),
-                    "image_url": product.get("image", ""),
+                    "image": product.get("image", ""),
                     "describe": product.get("describe", ""),
                     "gender": product.get("gender", ""),
                     "number": product.get("number", 0),
@@ -158,19 +162,17 @@ async def search_image(file: UploadFile = File(...), top_k: int = 4):
 # =========================
 
 # Multilingual text embedding model (hỗ trợ tiếng Việt tốt)
-text_model_name = os.getenv("TEXT_EMBED_MODEL", "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
-text_model = SentenceTransformer(text_model_name)
-
-TEXT_INDEX_PATH = os.getenv("TEXT_INDEX_PATH", "product_text.index")
-TEXT_META_PATH  = os.getenv("TEXT_META_PATH", "product_text_meta.pkl")
 
 text_index: Optional[faiss.IndexFlatIP] = None
 text_meta: List[dict] = []
 
 def normalize(v: np.ndarray) -> np.ndarray:
-    # L2 normalize for cosine similarity via inner product
-    norm = np.linalg.norm(v, axis=1, keepdims=True) + 1e-10
-    return v / norm
+    if v.ndim == 1:
+        norm = np.linalg.norm(v) + 1e-10
+        return v / norm
+    else:
+        norm = np.linalg.norm(v, axis=1, keepdims=True) + 1e-10
+        return v / norm
 
 def save_text_index(index: faiss.IndexFlatIP, meta: List[dict]):
     faiss.write_index(index, TEXT_INDEX_PATH)
@@ -189,13 +191,11 @@ load_text_index()
 
 @app.post("/ingest-products")
 def ingest_products(payload: IngestPayload):
-    """
-    Nhận danh sách sản phẩm => build text chunks => embed => FAISS index.
-    Có thể gọi API này mỗi khi bạn sync dữ liệu mới.
-    """
     global text_index, text_meta
     docs = []
     meta = []
+    
+    # Tạo docs và meta từ payload
     for p in payload.products:
         text = "\n".join([
             f"Tên: {p.name}",
@@ -207,7 +207,6 @@ def ingest_products(payload: IngestPayload):
             f"URL: {p.url or ''}",
             f"ID: {p.id}"])
         docs.append(text)
-
         meta.append({
             "id": p.id,
             "name": p.name,
@@ -218,23 +217,35 @@ def ingest_products(payload: IngestPayload):
             "description": p.description,
             "url": p.url,
             "raw": text,
+            "image": p.image
         })
-
+    
+    print(f"Docs tạo được: {len(docs)}")
+    if not docs:
+        return {"ok": False, "indexed": 0, "total": 0, "message": "Không có dữ liệu để ingest"}
+    
     # embeddings
     embs = text_model.encode(docs, convert_to_numpy=True)
     embs = embs.astype("float32")
-    embs = normalize(embs)
-
+    if embs.ndim == 1:
+        embs = embs.reshape(1, -1)
+    
     # build or extend index
     dim = embs.shape[1]
     if text_index is None:
         text_index = faiss.IndexFlatIP(dim)
         text_meta = []
+    elif dim != text_index.d:  # <-- Thêm kiểm tra này
+        print(f"Chiều không khớp ({dim} vs {text_index.d}). Tạo lại index...")
+        text_index = faiss.IndexFlatIP(dim)
+        text_meta = []  # Reset metadata
+    
     text_index.add(embs)
     text_meta.extend(meta)
-
+    
     save_text_index(text_index, text_meta)
-    return {"ok": True, "indexed": len(docs), "total": len(text_meta)}
+    return {"ok": True, "indexed": len(docs), "total": len(text_meta)}  
+    # Phần còn lại giữ nguyên...
 def ingest_all_products_from_mongo():
     # Kết nối MongoDB
     client = MongoClient("mongodb+srv://huytehuy:huytehuy@cluster0.i6slrnu.mongodb.net")
@@ -243,18 +254,36 @@ def ingest_all_products_from_mongo():
     
     # Lấy toàn bộ sản phẩm
     products = list(collection.find({}))
+    print(f"Tìm thấy {len(products)} sản phẩm từ MongoDB")
 
     # Chuyển đổi sang dạng ProductItem
     items = []
     for p in products:
         desc = p.get("describe", "")
-        # if isinstance(desc, list):
-        #     desc = " ".join(str(x) )
-
-    # Gọi hàm ingest_products trực tiếp (nếu dùng nội bộ Python)
-    from fastapi.encoders import jsonable_encoder
-    ingest_products(IngestPayload(products=[ProductItem(**item) for item in items]))
-
+        if isinstance(desc, list):
+            desc = " ".join(str(x) for x in desc)
+            
+        # Thêm vào items
+        items.append({
+            "id": str(p.get("_id")),
+            "name": p.get("name_product", ""),
+            "category": p.get("id_category", ""),
+            "specs": "",  # Thêm nếu bạn có specs
+            "description": desc,
+            "price": str(p.get("price_product", "")),
+            "warranty": "",  # Thêm nếu bạn có warranty
+            "url": f"http://shop.huytehuy.id.vn/detail/{p.get('_id')}",
+            "image": p.get("image", "")
+        })
+    
+    print(f"Đã chuyển đổi {len(items)} sản phẩm để ingest")
+    
+    # Gọi hàm ingest_products
+    if items:
+        result = ingest_products(IngestPayload(products=[ProductItem(**item) for item in items]))
+        print(f"Kết quả ingest: {result}")
+    else:
+        print("Không có sản phẩm nào để ingest!")
 class ChatPayload(BaseModel):
     question: str
     top_k: Optional[int] = 5
@@ -266,7 +295,7 @@ def call_llm(prompt: str) -> str:
       - OLLAMA: set env LLM_PROVIDER=ollama, OLLAMA_MODEL
       - GEMINI: set env LLM_PROVIDER=gemini, GEMINI_API_KEY, GEMINI_MODEL
     """
-    provider = os.getenv("LLM_PROVIDER", "google").lower()
+    provider = "google".lower()
 
     if provider == "ollama":
         # ... (giữ nguyên như cũ)
@@ -274,8 +303,8 @@ def call_llm(prompt: str) -> str:
 
     elif provider == "google":
         import requests
-        GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
-        GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyCiDitui0RlHWHVtEzEsKmzBIq7QmvRMzU")
+        GEMINI_MODEL = "gemini-2.5-flash"
+        GEMINI_API_KEY = "AIzaSyCiDitui0RlHWHVtEzEsKmzBIq7QmvRMzU"
         if not GEMINI_API_KEY:
             return "Thiếu GEMINI_API_KEY"
         
@@ -340,3 +369,27 @@ Ngữ cảnh:
 """
     answer = call_llm(prompt)
     return {"answer": answer, "sources": retrieved}
+@app.post("/refresh-image-index")
+def refresh_image_index():
+    global img_embeddings, img_ids, img_index
+    img_embeddings = []
+    img_ids = []
+    
+    if os.path.isdir(PRODUCT_IMG_DIR):
+        for file in os.listdir(PRODUCT_IMG_DIR):
+            if file.lower().endswith((".jpg", ".jpeg", ".png", ".webp")):
+                path = os.path.join(PRODUCT_IMG_DIR, file)
+                with Image.open(path) as im:
+                    emb = clip_model.encode([im], convert_to_tensor=False, normalize_embeddings=True)
+                    img_embeddings.append(emb[0])
+                    img_ids.append(file)
+    
+    if img_embeddings:
+        img_embeddings = np.array(img_embeddings).astype("float32")
+        img_index = faiss.IndexFlatIP(img_embeddings.shape[1])
+        img_index.add(img_embeddings)
+        return {"ok": True, "images_indexed": len(img_ids), "images": img_ids}
+    else:
+        img_embeddings = None
+        img_index = None
+        return {"ok": False, "message": "No images found in products_images directory"}

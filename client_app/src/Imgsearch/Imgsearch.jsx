@@ -174,7 +174,7 @@ function Imgsearch(props) {
                                                     <Link to={`/detail/${value._id}`} style={{ width: '100%', textDecoration: 'none', color: 'inherit' }}>
                                                         <div className="product-image" style={{ width: '100%', textAlign: 'center' }}>
                                                             <img
-                                                                src={value.image_url}
+                                                                src={value.image}
                                                                 alt="Li's Product Image"
                                                                 style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '6px' }}
                                                             />

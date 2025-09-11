@@ -59,7 +59,6 @@ function Detail_Product() {
             image: product.image,
             size: 'S',
         }
-        console.log(cart1)
         if (cart1) {
             const existingProduct = cart1.find(item => item.id_product === id)
             if (existingProduct) {
@@ -146,7 +145,6 @@ function Detail_Product() {
             }
             const post_data = async () => {
                 const response = await CommentAPI.post_comment(data, id)
-                console.log(response)
                 set_load_comment(true)
                 set_comment('')
                 set_modal(false)
@@ -167,9 +165,7 @@ function Detail_Product() {
         if (load_comment) {
             const fetchData = async () => {
                 const response = await CommentAPI.get_comment(id)
-                console.log(response)
                 set_list_comment(response)
-                console.log(response)
             }
             fetchData()
             const intervalId = setInterval(() => {
