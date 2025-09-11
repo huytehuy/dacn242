@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import crypto from 'crypto'
+import crypto from '../polyfills/crypto-browserify';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeCount } from '../Redux/Action/ActionCount';
 import CouponAPI from '../API/CouponAPI';
