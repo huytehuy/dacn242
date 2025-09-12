@@ -22,7 +22,7 @@ function ChatBox() {
         setLoading(true);
 
         try {
-            const res = await axios.post("http://localhost:5000/chat", {
+            const res = await axios.post("http://54.197.122.148:5000//chat", {
                 question: input
             });
             // Không thêm answer vào messages nữa
