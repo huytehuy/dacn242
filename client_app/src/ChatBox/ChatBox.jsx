@@ -22,7 +22,7 @@ function ChatBox() {
         setLoading(true);
 
         try {
-            const res = await axios.post("https://api.huytehuy.id.vn:5000/chat", {
+            const res = await axios.post("https://api.huytehuy.id.vn/chat", {
                 question: input
             });
             // Không thêm answer vào messages nữa

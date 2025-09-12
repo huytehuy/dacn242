@@ -251,7 +251,7 @@ function Header(props) {
             setError(null);
 
             // Gửi yêu cầu đến backend Flask API
-            const response = await axios.post('https://api.huytehuy.id.vn:5000/upload-image', formData, {
+            const response = await axios.post('https://api.huytehuy.id.vn/upload-image', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

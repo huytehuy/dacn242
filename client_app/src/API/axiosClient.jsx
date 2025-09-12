@@ -5,7 +5,7 @@ import queryString from 'query-string';
 // Please have a look at here `https://github.com/axios/axios#requestconfig` for the full list of configs
 const axiosClient = axios.create({
     // baseURL: 'http://localhost:8000',
-    baseURL: 'https://api.huytehuy.id.vn:8000/',
+    baseURL: 'https://api.huytehuy.id.vn',
     // baseURL: 'https://dacn242-server.onrender.com',
     headers: {
         'content-type': 'application/json',
