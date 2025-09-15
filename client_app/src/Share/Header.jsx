@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo, useState, useRef } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import User from '../API/User';
-import logo from '../Image/logo_ecommerce_website_806.jpg'
+import logo from '../Image/HUYTEHUY.png'
 import { changeCount } from '../Redux/Action/ActionCount';
 import { addSession, deleteSession } from '../Redux/Action/ActionSession';
 import Product from '../API/Product';
@@ -26,7 +26,6 @@ function Header(props) {
     // State count of cart
     const [count_cart, set_count_cart] = useState(0)
     const [total_price, set_total_price] = useState(0)
-    const [promotion, set_promotion] = useState(0)
     const [carts_mini, set_carts_mini] = useState([])
     const { t, i18n } = useTranslation();
     const handleChangeLanguage = (lng) => {
@@ -395,7 +394,7 @@ function Header(props) {
                                 style={{
                                     width: 40,
                                     height: 40,
-                                    border: i18n.language === 'vi' ? '2px solid #007bff' : '2px solid transparent',
+                                    border: i18n.language === 'vi' ? '2px solid #00897B' : '2px solid transparent',
                                     borderRadius: '50%',
                                     boxSizing: 'border-box',
                                     objectFit: 'cover'
@@ -409,7 +408,7 @@ function Header(props) {
                                 style={{
                                     width: 40,
                                     height: 40,
-                                    border: i18n.language === 'en' ? '2px solid #007bff' : '2px solid transparent',
+                                    border: i18n.language === 'en' ? '2px solid #00897B' : '2px solid transparent',
                                     borderRadius: '50%',
                                     boxSizing: 'border-box',
                                     objectFit: 'cover'
@@ -423,11 +422,11 @@ function Header(props) {
                                 <div className="hb-menu" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <nav>
                                         <ul>
-                                            <li className="dropdown-holder"><Link to="/">{t('Home')}</Link></li>
-                                            <li className="megamenu-holder"><Link to="/shop/all">{t('Category')}</Link>
+                                            <li className="dropdown-holder" ><Link to="/" style={{color:'white'}}>{t('Home')}</Link></li>
+                                            <li className="megamenu-holder"><Link to="/shop/all" style={{color:'white'}}>{t('Category')}</Link>
                                             </li>
-                                            <li><Link to="/event">{t('Event')}</Link></li>
-                                            <li><Link to="/contact">{t('Contact')}</Link></li>
+                                            <li><Link to="/event" style={{color:'white'}}>{t('Event')}</Link></li>
+                                            <li><Link to="/contact" style={{color:'white'}}>{t('Contact')}</Link></li>
                                         </ul>
                                     </nav>
 

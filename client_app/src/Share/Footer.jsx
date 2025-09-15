@@ -1,7 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import Global from '../Image/logo_ecommerce_website_806.jpg'
+import Global from '../Image/HUYTEHUY.png'
 
 Footer.propTypes = {
 

@@ -29,9 +29,12 @@
 
   }
   .li_setting,.username{
-    color: black;
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 140px;
+  }
+  .header{
+    color: white;
   }

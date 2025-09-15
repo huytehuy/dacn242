@@ -203,7 +203,7 @@ function Shop() {
                                 </div>
                                 <div className="li-blog-sidebar pt-25">
                                     <ul className="li-blog-archive">
-                                        <h4 className="li-blog-sidebar-title"><li><Link to="/shop/all" style={id === 'all' ? { cursor: 'pointer', color: '#fed700' } : { cursor: 'pointer' }}>{t("All")}</Link></li></h4>
+                                        <h4 className="li-blog-sidebar-title"><li><Link to="/shop/all" style={id === 'all' ? { cursor: 'pointer', color: '#00897B' } : { cursor: 'pointer' }}>{t("All")}</Link></li></h4>
                                     </ul>
                                 </div>
                                 <div className="li-blog-sidebar pt-25">
@@ -218,7 +218,7 @@ function Shop() {
                                                         category: id,
                                                         sort: 'default',
                                                         brand: ''
-                                                    })} to={`/shop/${value._id}`} style={id === value._id ? { cursor: 'pointer', color: '#fed700' } : { cursor: 'pointer' }}>{value.category}</Link></h4>
+                                                    })} to={`/shop/${value._id}`} style={id === value._id ? { cursor: 'pointer', color: '#00897B' } : { cursor: 'pointer' }}>{value.category}</Link></h4>
                                                 </li>
                                             ))
                                         }

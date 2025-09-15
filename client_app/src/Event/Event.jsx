@@ -65,7 +65,7 @@ const { t } = useTranslation();
                                             <a className="a_event">{t('Sales')}</a>
                                         </div>
                                         <div style={{ marginTop: '2rem' }}>
-                                            <span style={{ fontSize: '1rem', color: 'gray' }}>{t('Remaining')}: <i style={{ color: '#fed700' }}>{value.count} {t('times')}</i></span>
+                                            <span style={{ fontSize: '1rem', color: 'gray' }}>{t('Remaining')}: <i style={{ color: '#00897B' }}>{value.count} {t('times')}</i></span>
                                         </div>
                                         <hr />
                                         <div style={{ marginTop: '.5rem' }}>

@@ -8,7 +8,7 @@
     position: relative;
     width: 93%;
     height: 80px;
-    color: #FED700 !important;
+    color: #00897B !important;
     display: flex;
     justify-content: center;
   }
@@ -23,7 +23,7 @@
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: #FED700;
+    background: #00897B;
     margin: -4px 0 0 -4px;
 
   }

@@ -55,7 +55,7 @@
 }
 .upload-container1 p {
   font-size: 24px;
-  color: #FED700;
+  color: #00897B;
   font-weight: 700;
   
 
@@ -162,7 +162,7 @@ input[type="file"]::file-selector-button:active {
   position: relative;
   width: 93%;
   height: 80px;
-  color: #FED700 !important;
+  color: #00897B !important;
   display: flex;
   justify-content: center;
 }
@@ -179,7 +179,7 @@ input[type="file"]::file-selector-button:active {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #FED700;
+  background: #00897B;
   margin: -4px 0 0 -4px;
 
 }

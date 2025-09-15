@@ -79,7 +79,7 @@ function ChatBox() {
                     }}>
                         <span style={{
                             display: "inline-block",
-                            background: msg.from === "user" ? "#007bff" : "#e9ecef",
+                            background: msg.from === "user" ? "#00897B" : "#e9ecef",
                             color: msg.from === "user" ? "#fff" : "#333",
                             borderRadius: 16,
                             padding: "8px 14px",
@@ -100,7 +100,7 @@ function ChatBox() {
                                     )}
                                     {msg.product.url && (
                                         <div>
-                                            <a href={msg.product.url} target="_blank" rel="noopener noreferrer" style={{ color: "#007bff" }}>
+                                            <a href={msg.product.url} target="_blank" rel="noopener noreferrer" style={{ color: "#00897B" }}>
                                                 Xem chi tiết
                                             </a>
                                         </div>
@@ -141,7 +141,7 @@ function ChatBox() {
                     type="submit"
                     style={{
                         border: "none",
-                        background: "#007bff",
+                        background: "#00897B",
                         color: "#fff",
                         padding: "0 18px",
                         borderRadius: "0 0 10px 0",

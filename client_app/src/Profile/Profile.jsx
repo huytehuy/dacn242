@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import './Profile.css'
-import avt from './avt.jpg'
 import User from '../API/User';
-import { addSession } from '../Redux/Action/ActionSession';
-import { useDispatch } from 'react-redux';
 
 Profile.propTypes = {
 

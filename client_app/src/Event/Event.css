@@ -30,7 +30,7 @@
 }
 
 .a_event:hover{
-    background-color: #fed700;
+    background-color: #00897B;
     color: #fff !important;
     transition: all .2s ease-in-out;
     border: 1px solid #fff;
@@ -44,7 +44,7 @@ hr{
 .a_promotion{
     padding: .4rem 6.3rem;
     color: #fff !important;
-    background-color: #fed700;
+    background-color: #00897B;
     cursor: pointer;
     border-radius: .2rem;
 }

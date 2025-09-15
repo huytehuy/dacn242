@@ -13,7 +13,7 @@ body
 .sk-cube-grid .sk-cube {
   width: 33%;
   height: 33%;
-  background-color: #FED700;
+  background-color: #00897B;
   float: left;
   -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
           animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out; 
