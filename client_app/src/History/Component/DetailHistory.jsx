@@ -26,7 +26,7 @@ function DetailHistory(props) {
     const [detail_order, set_detail_order] = useState([])
     const [total_price, set_total_price] = useState(0)
     const [note, set_note] = useState({})
-    const baseURL = 'https://shop.huytehuy.online';
+    const baseURL = 'https://shop.huytehuy.id.vn';
 
     useEffect(() => {
 
@@ -109,7 +109,7 @@ function DetailHistory(props) {
 
         try {
             // Gửi request đến API cập nhật kho
-            const response = await axios.patch('https://datnfixed.onrender.com/api/admin/product/updateDepository1', {
+            const response = await axios.patch('http://localhost:8000/api/admin/product/updateDepository1', {
                 _id: id,
                 count: count
             });
@@ -274,9 +274,9 @@ function DetailHistory(props) {
 
                                                                     
                                                                     switch (order.status) {
-                                                                        case "1": if (order.id_payment.pay_name === "Cash ") {
+                                                                        case "1": if (order?.id_payment?.pay_name === "Cash") {
                                                                             return <span >Đơn hàng đang duyệt </span>
-                                                                        } if (order.id_payment.pay_name === "Momo" && order.pay === true) {
+                                                                        } if (order?.pay === true) {
                                                                             return <span >Đơn hàng đang duyệt</span>
                                                                         } else {
                                                                                 return <>

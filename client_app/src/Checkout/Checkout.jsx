@@ -12,11 +12,18 @@ import NoteAPI from '../API/NoteAPI';
 import Detail_OrderAPI from '../API/Detail_OrderAPI';
 import CouponAPI from '../API/CouponAPI';
 import MoMo from './MoMo.jsx'
+import SePay from './SePay.jsx' // Import SePay component
 import LogoMomo from './momo-png/momo_icon_square_pinkbg_RGB.png'
+import LogoPaypal from './payment-icons/paypal.png' // Add this import
+import LogoSepay from './payment-icons/sepay.png' // Add this import
+import LogoCreditCard from './payment-icons/credit.jpg' // Add this import
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 
-const socket = io('https://datnfixed.onrender.com', {
+// const socket = io('http://localhost:8000', {
+//     transports: ['websocket'], jsonp: false
+// });
+const socket = io('http://localhost:8000', {
     transports: ['websocket'], jsonp: false
 });
 socket.connect();
@@ -66,7 +73,7 @@ function Checkout() {
 
         try {
             // Gửi request đến API cập nhật kho
-            const response = await axios.patch('https://datnfixed.onrender.com/api/admin/product/updateDepository', {
+            const response = await axios.patch('http://localhost:8000/api/admin/product/updateDepository', {
                 _id: id,
             });
             console.log(response);
@@ -540,14 +547,14 @@ function Checkout() {
                                                         {errors.email && errors.email.type === "required" && <span style={{ color: 'red' }}>* Email is required</span>}
                                                     </div>
                                                 </div>
-                                                <div className="col-md-12">
+                                                {/* <div className="col-md-12">
                                                     <div className="order-button-payment">
                                                         {
                                                             redirect && <Redirect to="/success" />
                                                         }
                                                         <input value="Tiền mặt" type="submit" />                                                       
                                                     </div>                                                   
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </div>
                                     </form>
@@ -590,122 +597,235 @@ function Checkout() {
                                             </table>
                                         </div>
                                         <div className="payment-method">
-                                            <div className="payment-accordion">
-                                                <div id="accordion">
-                                                    <div className="card">
-                                                        <div className="card-header" id="#payment-3">
-                                                            <h5 className="panel-title">
-                                                                <a className="collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                                    PayPal
-                                                                </a>
-                                                            </h5>
+                                            <h4 style={{ 
+                                                marginBottom: '12px',
+                                                fontWeight: '600',
+                                                fontSize: '16px',
+                                                borderBottom: '1px solid #e5e5e5',
+                                                paddingBottom: '8px'
+                                            }}>
+                                                {t('Select Payment Method')}
+                                            </h4>
+                                            
+                                            {show_error ? (
+                                                <div className="alert alert-warning" role="alert" style={{ padding: '8px 12px', fontSize: '14px' }}>
+                                                    {t('Please check your information before proceeding with payment')}
+                                                </div>
+                                            ) : (
+                                                <div className="payment-options" style={{
+                                                    display: 'flex',
+                                                    flexWrap: 'wrap',
+                                                    gap: '10px',
+                                                    justifyContent: 'space-between'
+                                                }}>
+                                                    {/* PayPal */}
+                                                    <div className="payment-option-item" style={{
+                                                        marginBottom: '10px',
+                                                        background: '#f8f9fa',
+                                                        border: '1px solid #e9ecef',
+                                                        borderRadius: '6px',
+                                                        overflow: 'hidden',
+                                                        width: 'calc(50% - 5px)'  // Take up half the width minus gap
+                                                    }}>
+                                                        <div className="payment-header" style={{
+                                                            padding: '8px 12px',
+                                                            backgroundColor: '#f1f3f5',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            cursor: 'pointer'
+                                                        }}>
+                                                            <img 
+                                                                src={LogoPaypal} 
+                                                                alt="PayPal" 
+                                                                style={{ 
+                                                                    width: '50px', 
+                                                                    marginRight: '10px' 
+                                                                }} 
+                                                            />
+                                                            <span style={{ fontWeight: '500', fontSize: '14px' }}>PayPal</span>
                                                         </div>
-                                                        <div>
-                                                            <div className="card-body">
-                                                                {
-                                                                    show_error ? 'Vui lòng kiểm tra thông tin!' :
-                                                                        <Paypal
-                                                                            information={information}
-                                                                            total={total_price}
-                                                                            Change_Load_Order={Change_Load_Order}
-                                                                            from={from}
-                                                                            distance={distance}
-                                                                            duration={duration}
-                                                                            price={price}
-                                                                        />
-                                                                }
+                                                        <div className="payment-content" style={{
+                                                            padding: '10px'
+                                                        }}>
+                                                            <Paypal
+                                                                information={information}
+                                                                total={total_price}
+                                                                Change_Load_Order={Change_Load_Order}
+                                                                from={from}
+                                                                distance={distance}
+                                                                duration={duration}
+                                                                price={price}
+                                                            />
+                                                            <div style={{ 
+                                                                marginTop: '6px', 
+                                                                fontSize: '0.75rem', 
+                                                                color: '#6c757d' 
+                                                            }}>
+                                                                {t('Safe and secure payments via PayPal')}
                                                             </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* Cash on Delivery - Moved up to replace Credit Card */}
+                                                    <div className="payment-option-item" style={{
+                                                        marginBottom: '10px',
+                                                        background: '#f8f9fa',
+                                                        border: '1px solid #e9ecef',
+                                                        borderRadius: '6px',
+                                                        overflow: 'hidden',
+                                                        width: 'calc(50% - 5px)'  // Take up half the width minus gap
+                                                    }}>
+                                                        <div className="payment-header" style={{
+                                                            padding: '8px 12px',
+                                                            backgroundColor: '#f1f3f5',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            cursor: 'pointer'
+                                                        }}>
+                                                            <i className="fa fa-money" style={{ 
+                                                                fontSize: '16px', 
+                                                                marginRight: '10px',
+                                                                width: '30px',
+                                                                textAlign: 'center',
+                                                                color: '#28a745'
+                                                            }}></i>
+                                                            <span style={{ fontWeight: '500', fontSize: '14px' }}>{t('Cash on Delivery')}</span>
+                                                        </div>
+                                                        <div className="payment-content" style={{
+                                                            padding: '10px',
+                                                            textAlign: 'center'
+                                                        }}>
+                                                            <button 
+                                                                onClick={handleSubmit(handler_Checkout)}
+                                                                className="btn" 
+                                                                style={{
+                                                                    backgroundColor: '#28a745',
+                                                                    color: 'white',
+                                                                    padding: '6px 12px',
+                                                                    width: '100%',
+                                                                    maxWidth: '100%',
+                                                                    borderRadius: '4px',
+                                                                    border: 'none',
+                                                                    cursor: 'pointer',
+                                                                    fontSize: '14px'
+                                                                }}
+                                                            >
+                                                                {t('Pay with Cash on Delivery')}
+                                                            </button>
+                                                            <div style={{ 
+                                                                marginTop: '6px', 
+                                                                fontSize: '0.75rem', 
+                                                                color: '#6c757d' 
+                                                            }}>
+                                                                {t('Pay when you receive your order')}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* MoMo */}
+                                                    <div className="payment-option-item" style={{
+                                                        marginBottom: '10px',
+                                                        background: '#f8f9fa',
+                                                        border: '1px solid #e9ecef',
+                                                        borderRadius: '6px',
+                                                        overflow: 'hidden',
+                                                        width: 'calc(50% - 5px)'  // Take up half the width minus gap
+                                                    }}>
+                                                        <div className="payment-header" style={{
+                                                            padding: '8px 12px',
+                                                            backgroundColor: '#f1f3f5',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            cursor: 'pointer'
+                                                        }}>
+                                                            <img 
+                                                                src={LogoMomo} 
+                                                                alt="MoMo" 
+                                                                style={{ 
+                                                                    width: '30px', 
+                                                                    marginRight: '10px',
+                                                                    borderRadius: '4px'
+                                                                }} 
+                                                            />
+                                                            <span style={{ fontWeight: '500', fontSize: '14px' }}>MoMo</span>
+                                                        </div>
+                                                        <div className="payment-content" style={{
+                                                            padding: '10px'
+                                                        }}>
+                                                            <button 
+                                                                className="btn" 
+                                                                onClick={handlerMomo}
+                                                                style={{
+                                                                    backgroundColor: '#a50064',
+                                                                    color: 'white',
+                                                                    padding: '6px 12px',
+                                                                    width: '100%',
+                                                                    maxWidth: '100%',
+                                                                    borderRadius: '4px',
+                                                                    border: 'none',
+                                                                    cursor: 'pointer',
+                                                                    fontSize: '14px',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    justifyContent: 'center',
+                                                                    margin: '0 auto'
+                                                                }}
+                                                            >
+                                                                {t('Pay with MoMo')}
+                                                            </button>
+                                                            <div style={{ display: 'none' }}>
+                                                                <MoMo
+                                                                    orderID={orderID}
+                                                                    total={total_price}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* SePay */}
+                                                    <div className="payment-option-item" style={{
+                                                        marginBottom: '10px',
+                                                        background: '#f8f9fa',
+                                                        border: '1px solid #e9ecef',
+                                                        borderRadius: '6px',
+                                                        overflow: 'hidden',
+                                                        width: 'calc(50% - 5px)'  // Take up half the width minus gap
+                                                    }}>
+                                                        <div className="payment-header" style={{
+                                                            padding: '8px 12px',
+                                                            backgroundColor: '#f1f3f5',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            cursor: 'pointer'
+                                                        }}>
+                                                            <img 
+                                                                src={LogoSepay} 
+                                                                alt="SePay" 
+                                                                style={{ 
+                                                                    width: '30px', 
+                                                                    marginRight: '10px',
+                                                                    borderRadius: '4px'
+                                                                }} 
+                                                            />
+                                                            <span style={{ fontWeight: '500', fontSize: '14px' }}>SePay</span>
+                                                        </div>
+                                                        <div className="payment-content" style={{
+                                                            padding: '10px',
+                                                            display: 'flex',
+                                                            justifyContent: 'center'
+                                                        }}>
+                                                            <SePay
+                                                                information={information}
+                                                                total={total_price}
+                                                                from={from}
+                                                                distance={distance}
+                                                                duration={duration}
+                                                                price={price}
+                                                            />
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div>
-                                                    <div className="card">
-                                                        <div className="card-header" id="#payment-3">
-                                                            <h5 className="panel-title">
-                                                                <a className="collapsed" data-toggle="collapse" data-target="#collapseMomo" aria-expanded="true" aria-controls="collapseMomo">
-                                                                    MoMo
-                                                                </a>
-                                                            </h5>
-                                                        </div>
-                                                        <div>
-                                                            <div className="card-body">
-                                                                {
-                                                                    show_error ? 'Vui lòng kiểm tra thông tin!' :
-                                                                        <div>
-                                                                            <img src={LogoMomo} width="100" onClick={handlerMomo}
-                                                                                style={{ cursor: 'pointer' }} />
-                                                                            <MoMo
-                                                                                orderID={orderID}
-                                                                                total={total_price}
-                                                                            />
-                                                                        </div>
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-                                                    {/* <div className="card" style={{ marginTop: 10 }}>
-                                                        <div className="card-header" id="#payment-3">
-                                                            <h5 className="panel-title">
-                                                                <a className="collapsed" data-toggle="collapse" data-target="#collapseMomo" aria-expanded="true" aria-controls="collapseMomo">
-                                                                    QR
-                                                                </a>
-                                                            </h5>
-                                                        </div>
-                                                        <div>
-                                                            <div className="card-body">
-                                                                {
-                                                                    show_error ? 'Vui lòng kiểm tra thông tin!' :
-                                                                        <div onClick={() => Modal_Image}>
-                                                                            { <img src={LogoQR} width="100" onClick={handlerMomo}
-                                                                    style={{ cursor: 'pointer' }} />
-                                                                    <MoMo 
-                                                                        orderID={orderID}
-                                                                        total={total_price}
-                                                                        />}
-
-                                                                            <Button variant="primary" onClick={() => setModalShow(true)}>
-                                                                                Thanh toán QR
-                                                                            </Button>
-
-                                                                            <Modal_Image
-                                                                                show={modalShow}
-                                                                                onHide={() => setModalShow(false)}
-                                                                            />
-
-                                                                        </div>
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                    </div> */}
-                                                    {/* 
-                                                <div className="card">                
-                                                <div className="card-header" id="#payment-3">
-                                                        <h5 className="panel-title">
-                                                            <a className="collapsed" data-toggle="collapse" data-target="#collapseMomo" aria-expanded="false" aria-controls="collapseMomo">
-                                                                MoMo
-                                                        </a>
-                                                        </h5>
-                                                    </div>
-                                                    <div id="collapseMomo" className="collapse">
-                                                        <div className="card-body">
-                                                            {
-                                                                show_error ? 'Please Checking Information!' :
-                                                                <div>
-                                                                    <img src={LogoMomo} width="100" onClick={handlerMomo}
-                                                                    style={{ cursor: 'pointer' }} />
-                                                                    <MoMo 
-                                                                        orderID={orderID}
-                                                                        total={total_price}
-                                                                        />
-                                                                </div>  
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                </div> */}
-                                                </div>
-                                            </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

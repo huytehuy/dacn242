@@ -127,7 +127,10 @@
   "Apply_Coupon": "Apply Coupon",
   "Total_Products": "Total Products",
   "Discount": "Discount",
-  "Next": "Next"
+  "Next": "Next",
+  "shipping_information": "Shipping Information",
+  "fullname_placeholder": "Enter your full name",
+  "fullname": "Full Name"
 
 
 }

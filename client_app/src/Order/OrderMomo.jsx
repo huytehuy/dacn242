@@ -8,7 +8,7 @@ import OrderAPI from '../API/OrderAPI';
 import Detail_OrderAPI from '../API/Detail_OrderAPI';
 import io from "socket.io-client";
 import axios from 'axios';
-const socket = io('https://datnfixed.onrender.com', {
+const socket = io('http://localhost:8000', {
     transports: ['websocket'], jsonp: false
 });
 socket.connect();
@@ -111,11 +111,11 @@ function OrderMomo(props) {
 
                    
 
-                    await Detail_OrderAPI.post_detail_order(data_detail_order)
-                    const response = await axios.patch('https://datnfixed.onrender.com/api/admin/product/updateDepository', {
-                        _id: data_detail_order.id_product,
-                    });
-                    console.log(response)
+                    // await Detail_OrderAPI.post_detail_order(data_detail_order)
+                    // const response = await axios.patch('http://localhost:8000/api/admin/product/updateDepository', {
+                    //     _id: data_detail_order.id_product,
+                    // });
+                    // console.log(response)
 
 
                 }
@@ -210,11 +210,11 @@ function OrderMomo(props) {
                             size: data_carts[i].size
                         }
                         
-                        await Detail_OrderAPI.post_detail_order(data_detail_order)
-                        const response = await axios.patch('https://datnfixed.onrender.com/api/admin/product/updateDepository', {
-                            _id: data_detail_order.id_product,
+                        // await Detail_OrderAPI.post_detail_order(data_detail_order)
+                        // const response = await axios.patch('http://localhost:8000/api/admin/product/updateDepository', {
+                        //     _id: data_detail_order.id_product,
                           
-                        });
+                        // });
     
                     }
                     const data_email = {

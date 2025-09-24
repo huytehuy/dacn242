@@ -85,7 +85,7 @@ function MainHistory(props) {
 
         try {
             // Gửi request đến API cập nhật kho
-            const response = await axios.patch('https://datnfixed.onrender.com/api/admin/product/updateDepository1', {
+            const response = await axios.patch('http://localhost:8000/api/admin/product/updateDepository1', {
                 _id: id,
                 count: count 
             });
@@ -210,9 +210,9 @@ function MainHistory(props) {
                                                             {(() => {
                                                                 switch (value.status) {
                                                                     case '1' :
-                                                                        if (value.id_payment?.pay_name === "Cash ") {
+                                                                        if (value.id_payment?.pay_name === "Cash") {
                                                                             return <span >Đơn hàng đang duyệt</span>
-                                                                        } if (value.id_payment?.pay_name === "Momo" && value.pay === true) {
+                                                                        } if ( value.pay === true) {
                                                                             return <span >Đơn hàng đang duyệt</span>
                                                                         } else {
                                                                             return <>

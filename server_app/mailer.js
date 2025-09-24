@@ -1,7 +1,7 @@
 const nodeMailer = require('nodemailer');
 
-const adminEmail = 'huuhieu147@gmail.com'; // Replace with your email
-const adminPassword = 'nwvkuwyhlztkxchv'; // Replace with your app password
+const adminEmail = 'phamkhanhhuy1231@gmail.com'; // Replace with your email
+const adminPassword = 'lnqvsiiqxkajigul'; // Replace with your app password
 
 const mailHost = 'smtp.gmail.com';
 const mailPort = 587;
@@ -18,7 +18,7 @@ const sendMail = (to, subject, htmlContent) => {
     });
 
     const options = {
-        from: '806 E-COMMERCE <' + adminEmail + '>', // Include sender's name and email address
+        from: 'HUYTEHUY E-COMMERCE <' + adminEmail + '>', // Include sender's name and email address
         to: to,
         subject: subject,
         html: htmlContent

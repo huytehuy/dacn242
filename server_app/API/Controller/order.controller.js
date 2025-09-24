@@ -41,7 +41,7 @@ module.exports.send_mail = async (req, res) => {
     // const htmlResult = '<h1>Xin Chào ' + req.body.fullname + '</h1>' + '<h3>Phone: ' + req.body.phone + '</h3>' + '<h3>Address:' + req.body.address + '</h3>' +
     //     htmlHead + htmlContent + '<h1>Phí Vận Chuyển: ' + req.body.price + '$</h1></br>' + '<h1>Tổng Thanh Toán: ' + req.body.total + '$</h1></br>' + '<p>Cảm ơn bạn!</p>'
 
-    const baseURL = 'https://shop.huytehuy.online'
+    const baseURL = 'https://shop.huytehuy.id.vn'
     const htmlResult = `<!DOCTYPE html>
     <html lang="en">
     <head>

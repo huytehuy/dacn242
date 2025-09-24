@@ -316,7 +316,7 @@ function Cart(props) {
                                                 {/* onClick={handlerCoupon} */}
 
                                                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal">
-                                                    {t("View Coupons")}
+                                                    {t("View_Coupons")}
                                                 </button>
 
                                                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

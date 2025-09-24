@@ -401,7 +401,7 @@ function Detail_Product() {
                                     <div style={{ overflow: 'auto', height: '10rem' }}>
                                         {
                                             list_comment && list_comment.map(value => (
-                                                value.status !== '1' && (<div className="comment-author-infos pt-25" key={value._id}>
+                                                (<div className="comment-author-infos pt-25" key={value._id}>
                                                     <span><div style={{ fontWeight: '400' }}>{value.content}</div></span>
                                                     <ul className="rating">
                                                         <li><i className={value.star > 0 ? 'fa fa-star' : 'fa fa-star-o'}></i></li>

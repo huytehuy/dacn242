@@ -18,12 +18,12 @@ from fastapi.staticfiles import StaticFiles
 app = FastAPI(title="E-commerce AI Service (Visual Search + Product Q&A)")
 text_model_name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 text_model = SentenceTransformer(text_model_name)
-PRODUCT_IMG_DIR = "/opt/dacn242/server_app/python/ai_service/products_images"
-TEXT_INDEX_PATH = "/opt/dacn242/server_app/python/ai_service/product_text.index"
-TEXT_META_PATH = "/opt/dacn242/server_app/python/ai_service/product_text_meta.pkl"
 
-# TEXT_INDEX_PATH = "python/ai_service/product_text.index"
-# TEXT_META_PATH  = "python/ai_service/product_text_meta.pkl"
+# Use relative paths instead of absolute paths
+PRODUCT_IMG_DIR = "python/ai_service/products_images"
+TEXT_INDEX_PATH = "python/ai_service/product_text.index"
+TEXT_META_PATH = "python/ai_service/product_text_meta.pkl"
+
 app.mount("/products_images", StaticFiles(directory="python/ai_service/products_images"), name="products_images")
 
 # Thêm đoạn này ngay sau khi tạo app
@@ -181,7 +181,15 @@ def normalize(v: np.ndarray) -> np.ndarray:
         norm = np.linalg.norm(v, axis=1, keepdims=True) + 1e-10
         return v / norm
 
+def ensure_directory_exists(file_path):
+    """Ensure the directory for the file path exists"""
+    directory = os.path.dirname(file_path)
+    if directory and not os.path.exists(directory):
+        os.makedirs(directory, exist_ok=True)
+
 def save_text_index(index: faiss.IndexFlatIP, meta: List[dict]):
+    ensure_directory_exists(TEXT_INDEX_PATH)
+    ensure_directory_exists(TEXT_META_PATH)
     faiss.write_index(index, TEXT_INDEX_PATH)
     with open(TEXT_META_PATH, "wb") as f:
         pickle.dump(meta, f)
@@ -279,7 +287,7 @@ def ingest_all_products_from_mongo():
             "description": desc,
             "price": str(p.get("price_product", "")),
             "warranty": "",  # Thêm nếu bạn có warranty
-            "url": f"http://shop.huytehuy.id.vn/detail/{p.get('_id')}",
+            "url": f"http://localhost:3000/detail/{p.get('_id')}",  # Updated URL
             "image": p.get("image", "")
         })
     
@@ -311,7 +319,7 @@ def call_llm(prompt: str) -> str:
     elif provider == "google":
         import requests
         GEMINI_MODEL = "gemini-2.5-flash"
-        GEMINI_API_KEY = "AIzaSyCiDitui0RlHWHVtEzEsKmzBIq7QmvRMzU"
+        GEMINI_API_KEY = "AIzaSyDh-IjvLfaM-X7Sz_3Nkd8W7PQ1jQe9VQw"
         if not GEMINI_API_KEY:
             return "Thiếu GEMINI_API_KEY"
         
@@ -381,6 +389,9 @@ def refresh_image_index():
     global img_embeddings, img_ids, img_index
     img_embeddings = []
     img_ids = []
+    
+    # Make sure the product image directory exists
+    ensure_directory_exists(PRODUCT_IMG_DIR)
     
     if os.path.isdir(PRODUCT_IMG_DIR):
         for file in os.listdir(PRODUCT_IMG_DIR):

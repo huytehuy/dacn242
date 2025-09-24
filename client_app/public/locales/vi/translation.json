@@ -121,6 +121,8 @@
   "Discount": "Giảm giá",
   "Total_Amount": "Tổng tiền",
   "Next": "Tiếp theo",
-  "view_coupon": "Xem mã giảm giá"
-
+  "view_coupon": "Xem mã giảm giá",
+  "shipping_information": "Thông tin vận chuyển",
+  "fullname_placeholder": "Nhập họ và tên",
+  "fullname": "Họ và tên"
 }
