@@ -29,7 +29,7 @@ function MoMo(props) {
         const serectkey = "S6rRbLSPkRXef39MVB0huuqNOPXVBW8c"
         const orderInfo = "Thanh toán MoMo"
         const notifyurl = "https://api.huytehuy.id.vn/api/Payment/momo"
-        const returnUrl = "http://localhost:3000/momo"
+        const returnUrl = "https://huytehuy.id.vn/momo"
         const amount = total.toString()
         const orderId = orderID
         const requestType = "captureMoMoWallet"

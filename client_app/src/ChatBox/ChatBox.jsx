@@ -23,7 +23,7 @@ function ChatBox() {
         setLoading(true);
 
         try {
-            const CHAT_URL = process.env.REACT_APP_CHAT_URL || "http://localhost:5000/chat";
+            const CHAT_URL = process.env.REACT_APP_CHAT_URL || "https://api.huytehuy.id.vn/chat";
             const res = await axios.post(CHAT_URL, { question: input });
 
             // only add product sources (no summary answer)

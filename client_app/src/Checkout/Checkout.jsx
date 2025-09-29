@@ -20,10 +20,10 @@ import LogoCreditCard from './payment-icons/credit.jpg' // Add this import
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 
-// const socket = io('http://localhost:8000', {
+// const socket = io('https://api.huytehuy.id.vn', {
 //     transports: ['websocket'], jsonp: false
 // });
-const socket = io('http://localhost:8000', {
+const socket = io('https://api.huytehuy.id.vn', {
     transports: ['websocket'], jsonp: false
 });
 socket.connect();
@@ -73,7 +73,7 @@ function Checkout() {
 
         try {
             // Gửi request đến API cập nhật kho
-            const response = await axios.patch('http://localhost:8000/api/admin/product/updateDepository', {
+            const response = await axios.patch('https://api.huytehuy.id.vn/api/admin/product/updateDepository', {
                 _id: id,
             });
             console.log(response);
@@ -115,12 +115,12 @@ function Checkout() {
     }
 
     const [show_error, set_show_error] = useState(false)
-
+    let infoCookies = JSON.parse(localStorage.getItem('information'))
     const [information, set_information] = useState({
-        fullname: '',
-        phone: '',
-        address: '',
-        email: '',
+        fullname: infoCookies.fullname ? infoCookies.fullname : '',
+        phone:  infoCookies.phone ? infoCookies.phone : '',
+        address:  infoCookies.address ? infoCookies.address : '',
+        email: infoCookies.email ? infoCookies.email : '',
     })
 
     const onChangeFullname = (e) => {
