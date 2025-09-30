@@ -111,7 +111,7 @@ function OrderMomo(props) {
 
                    
 
-                    // await Detail_OrderAPI.post_detail_order(data_detail_order)
+                    await Detail_OrderAPI.post_detail_order(data_detail_order)
                     // const response = await axios.patch('https://api.huytehuy.id.vn/api/admin/product/updateDepository', {
                     //     _id: data_detail_order.id_product,
                     // });
