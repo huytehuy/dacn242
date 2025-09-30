@@ -115,7 +115,7 @@ function Checkout() {
     }
 
     const [show_error, set_show_error] = useState(false)
-    let infoCookies = JSON.parse(localStorage.getItem('information'))
+    let infoCookies = JSON.parse(localStorage.getItem('information'))??[]
     const [information, set_information] = useState({
         fullname: infoCookies.fullname ? infoCookies.fullname : '',
         phone:  infoCookies.phone ? infoCookies.phone : '',
@@ -173,7 +173,6 @@ function Checkout() {
                 set_show_error(true)
             } else {
                 if (information.email === '') {
-
                     set_show_error(true)
                 } else {
                     localStorage.setItem('information', JSON.stringify(information))
