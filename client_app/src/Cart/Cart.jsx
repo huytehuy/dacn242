@@ -39,14 +39,25 @@ function Cart(props) {
         const query = '?' + queryString.stringify(params)
 
         const fetchAllData = async () => {
-            const response = await CouponAPI.getCoupons(query)
-            setCoupons(
-                Array.isArray(response.coupons)
-                    ? response.coupons.sort((a, b) => b.promotion - a.promotion)
-                    : []
-            );
-            console.log(response.coupons)
-
+            try {
+                const response = await CouponAPI.getCoupons(query)
+                console.log("Coupons response:", response);
+                
+                if (response && response.coupons) {
+                    const validCoupons = Array.isArray(response.coupons)
+                        ? response.coupons.sort((a, b) => b.promotion - a.promotion)
+                        : [];
+                    
+                    console.log("Valid coupons:", validCoupons);
+                    setCoupons(validCoupons);
+                } else {
+                    console.log("No coupons in response or invalid response structure");
+                    setCoupons([]);
+                }
+            } catch (error) {
+                console.error("Error fetching coupons:", error);
+                setCoupons([]);
+            }
         }
 
         set_list_carts(JSON.parse(localStorage.getItem('carts')))
@@ -171,6 +182,7 @@ function Cart(props) {
                 }
                 const query = '?' + queryString.stringify(params);
                 const response = await CouponAPI.checkCoupon(query);
+                console.log("Check coupon response:", response);
 
                 // Handle specific coupon response
                 if (response.msg === 'Mã giảm giá không tồn tại' || response.msg === 'Bạn đã sử dụng mã này rồi' || response.msg === 'Mã giảm giá đã hết hạn') {
@@ -187,14 +199,19 @@ function Cart(props) {
 
                 // Fetch all available coupons
                 const couponsResponse = await CouponAPI.getCoupons(query);
-                setCoupons(
-                    Array.isArray(couponsResponse.coupons)
+                console.log("Coupons after applying coupon:", couponsResponse);
+                
+                if (couponsResponse && couponsResponse.coupons) {
+                    const validCoupons = Array.isArray(couponsResponse.coupons)
                         ? couponsResponse.coupons.sort((a, b) => b.promotion - a.promotion)
-                        : []
-                );
+                        : [];
+                    
+                    console.log("Valid coupons after applying:", validCoupons);
+                    setCoupons(validCoupons);
+                }
 
             } catch (error) {
-                console.log('Failed to fetch coupons:', error);
+                console.error('Failed to fetch coupons:', error);
                 setCoupons([]); // Set empty array in case of error
             }
         }
@@ -295,7 +312,12 @@ function Cart(props) {
                                                         <td className="quantity">
                                                             <label>{t("Quantity")}</label>
                                                             <div className="cart-plus-minus">
-                                                                <input className="cart-plus-minus-box" value={value.count} type="text" />
+                                                                <input 
+                                                                    className="cart-plus-minus-box" 
+                                                                    readOnly 
+                                                                    value={value.count} 
+                                                                    type="text" 
+                                                                />
                                                                 <div className="dec qtybutton" onClick={() => downCount(value.count, value.id_cart)}><i className="fa fa-angle-down"></i></div>
                                                                 <div className="inc qtybutton" onClick={() => upCount(value.count, value.id_cart)}><i className="fa fa-angle-up"></i></div>
                                                             </div>
@@ -307,43 +329,46 @@ function Cart(props) {
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="coupon-all">
-                                            <div class="coupon">
-                                                <input id="coupon_code" class="input-text" onChange={(e) => set_coupon(e.target.value)} value={coupon} placeholder={t("Discount_Code")} type="text" style={{ paddingLeft: '5px' }} /> &nbsp;
+                                <div className="row">
+                                    <div className="col-12">
+                                        <div className="coupon-all">
+                                            <div className="coupon">
+                                                <input id="coupon_code" className="input-text" onChange={(e) => set_coupon(e.target.value)} value={coupon} placeholder={t("Discount_Code")} type="text" style={{ paddingLeft: '5px' }} /> &nbsp;
                                                 {/* <input class="button" value=" Áp dụng" type="submit" data-toggle="modal" data-target="#exampleModal" /> */}
                                                 {/* onClick={handlerCoupon} */}
 
-                                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal">
+                                                <button type="button" className="btn btn-info" data-toggle="modal" data-target="#exampleModal">
                                                     {t("View_Coupons")}
                                                 </button>
 
-                                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLabel">{t("Coupon List")}</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div className="modal-dialog" role="document">
+                                                        <div className="modal-content">
+                                                            <div className="modal-header">
+                                                                <h5 className="modal-title" id="exampleModalLabel">{t("Coupon List")}</h5>
+                                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                             </div>
-                                                            <div class="modal-body">
+                                                            <div className="modal-body">
                                                                 <div className="coupon-list">
-                                                                    {coupons && coupons
+                                                                    {console.log("Rendering coupons:", coupons)}
+                                                                    {coupons && coupons.length > 0 ? (
+                                                                        coupons
                                                                         .filter(coupon => {
                                                                             // Only show coupons that haven't expired
-
+                                                                            console.log("Filtering coupon:", coupon);
                                                                             return coupon.status === false || new Date(coupon.end) > new Date();
                                                                         })
                                                                         .map((coupon, index) => (
                                                                             <div key={index} className="coupon-item" style={{
                                                                                 border: '1px solid #ddd',
-                                                                                padding: '10px',
-                                                                                marginBottom: '10px',
+                                                                                padding: '6px',
+                                                                                marginBottom: '6px',
                                                                                 borderRadius: '5px',
                                                                                 display: 'flex',
-                                                                                alignItems: 'center'
+                                                                                alignItems: 'center',
+                                                                                fontSize: '0.9rem'
                                                                             }}>
                                                                                 <input
                                                                                     type="radio"
@@ -355,42 +380,49 @@ function Cart(props) {
                                                                                         setDiscount(newDiscount);
                                                                                         set_new_price(total_price - newDiscount);
                                                                                     }}
-                                                                                    style={{ marginRight: '10px' }}
+                                                                                    style={{ marginRight: '6px' }}
                                                                                 />
-                                                                                <div>
-                                                                                    <div className="coupon-description">
+                                                                                <div style={{ width: '100%' }}>
+                                                                                    <div className="coupon-description" style={{ marginBottom: '2px' }}>
                                                                                         {coupon.describe}
                                                                                     </div>
-                                                                                    <div className="coupon-code" style={{ fontWeight: 'bold' }}>
-                                                                                        {t('Discount_Code')}: {coupon.code}
+                                                                                    <div className="d-flex justify-content-between">
+                                                                                        <div className="coupon-code" style={{ fontWeight: 'bold', fontSize: '0.85rem', marginBottom: '2px' }}>
+                                                                                            {coupon.code}
+                                                                                        </div>
+                                                                                        <div className="coupon-discount" style={{ fontSize: '0.85rem' }}>
+                                                                                            {coupon.promotion}%
+                                                                                        </div>
                                                                                     </div>
-                                                                                    <div className="coupon-discount">
-                                                                                        {t('Discount_Percentage')}: {coupon.promotion}%
-                                                                                    </div>
-
-                                                                                    <div className="price-preview" style={{ color: 'green' }}>
-                                                                                        {t('Price_After_Discount')}: {new Intl.NumberFormat('vi-VN', {
-                                                                                            style: 'decimal',
-                                                                                            decimal: 'VND'
-                                                                                        }).format(total_price - ((total_price * coupon.promotion) / 100)) + ' VNĐ'}
-                                                                                    </div>
-                                                                                    <div className="coupon-expiration" style={{ color: '#ff6b6b' }}>
-                                                                                        {coupon.end && (
-                                                                                            <>{t('Expiration_Date')}: {new Date(coupon.end).toLocaleDateString('vi-VN')} ({
-                                                                                                Math.ceil((new Date(coupon.end) - new Date()) / (1000 * 60 * 60 * 24))
-                                                                                            } {t('days_left')})</>
-                                                                                        )}
+                                                                                    <div className="d-flex justify-content-between align-items-center">
+                                                                                        <div className="price-preview" style={{ color: 'green', fontSize: '0.85rem' }}>
+                                                                                            {new Intl.NumberFormat('vi-VN', {
+                                                                                                style: 'decimal',
+                                                                                                decimal: 'VND'
+                                                                                            }).format(total_price - ((total_price * coupon.promotion) / 100)) + ' VNĐ'}
+                                                                                        </div>
+                                                                                        <div className="coupon-expiration" style={{ color: '#ff6b6b', fontSize: '0.75rem' }}>
+                                                                                            {coupon.end && (
+                                                                                                <>{new Date(coupon.end).toLocaleDateString('vi-VN')} ({
+                                                                                                    Math.ceil((new Date(coupon.end) - new Date()) / (1000 * 60 * 60 * 24))
+                                                                                                } {t('days_left')})</>
+                                                                                            )}
+                                                                                        </div>
                                                                                     </div>
                                                                                 </div>
-
                                                                             </div>
-                                                                        ))}
+                                                                        ))
+                                                                    ) : (
+                                                                        <div className="no-coupons-message">
+                                                                            {t('No coupons available')}
+                                                                        </div>
+                                                                    )}
                                                                 </div>
                                                             </div>
-                                                            <div class="modal-footer">
+                                                            <div className="modal-footer">
                                                                 <button
                                                                     type="button"
-                                                                    class="btn btn-primary"
+                                                                    className="btn btn-primary"
                                                                     onClick={handlerCoupon}
                                                                     data-dismiss="modal"
                                                                 >
@@ -398,7 +430,7 @@ function Cart(props) {
                                                                 </button>
                                                                 <button
                                                                     type="button"
-                                                                    class="btn btn-secondary"
+                                                                    className="btn btn-secondary"
                                                                     data-dismiss="modal"
                                                                 >
                                                                     {t('Close')}
@@ -408,8 +440,6 @@ function Cart(props) {
                                                         </div>
                                                     </div>
                                                 </div>
-
-
                                             </div>
                                         </div>
                                     </div>

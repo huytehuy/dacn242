@@ -77,6 +77,7 @@ function Header(props) {
                 const response = await User.Get_User(decoded.id)
                 if (mounted) {
                     set_user(response)
+                    localStorage.setItem('information', JSON.stringify(response))
                     if (response) {
                         set_active_user(true)
                     }
