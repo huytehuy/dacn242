@@ -134,5 +134,6 @@
   "Please_check_your_information_before_proceeding_with_payment": "Vui lòng kiểm tra thông tin của bạn trước khi tiến hành thanh toán",
   "Checkout": "Thanh toán",
   "Order_Total": "Tổng đơn hàng",
-  "minutes": "phút"
+  "minutes": "phút",
+  "Order_Details": "Chi tiết đơn hàng"
 }

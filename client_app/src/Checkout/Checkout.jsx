@@ -71,19 +71,19 @@ function Checkout() {
         setLoading(true);
         setMessage(''); // Reset message before the request
 
-        try {
-            // Gửi request đến API cập nhật kho
-            const response = await axios.patch('https://api.huytehuy.id.vn/api/admin/product/updateDepository', {
-                _id: id,
-            });
-            console.log(response);
+        // try {
+        //     // Gửi request đến API cập nhật kho
+        //     const response = await axios.patch('https://api.huytehuy.id.vn/api/admin/product/updateDepository', {
+        //         _id: id,
+        //     });
+        //     console.log(response);
 
-            setMessage(response.data.msg); // Set message to show success
-        } catch (error) {
-            setMessage(error.response?.data?.msg || 'Có lỗi xảy ra'); // Show error message if any
-        } finally {
-            setLoading(false);
-        }
+        //     setMessage(response.data.msg); // Set message to show success
+        // } catch (error) {
+        //     setMessage(error.response?.data?.msg || 'Có lỗi xảy ra'); // Show error message if any
+        // } finally {
+        //     setLoading(false);
+        // }
     };
     function Sum_Price(carts, sum_price) {
 
@@ -234,6 +234,7 @@ function Checkout() {
 
         // Xứ lý API Order
         const response_order = await OrderAPI.post_order(data_order)
+        console.log(response_order)
 
         // data carts
         const data_carts = JSON.parse(localStorage.getItem('carts'))
@@ -282,13 +283,11 @@ function Checkout() {
         localStorage.removeItem('coupon')
         localStorage.setItem('carts', JSON.stringify([]))
 
-        set_redirect(true)
-
+        set_redirect(true)  // Set redirect to true after successful checkout
 
         // Hàm này dùng để load lại phần header bằng Redux
         const action_count_change = changeCount(count_change)
         dispatch(action_count_change)
-
     }
 
 
@@ -376,7 +375,9 @@ function Checkout() {
 
     return (
         <div>
-
+            {/* Add redirect to history page when checkout is successful */}
+            {redirect && <Redirect to="/history" />}
+            
             {
                 load_order && (
                     <div className="wrapper_loader">

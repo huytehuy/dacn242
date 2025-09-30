@@ -22,54 +22,29 @@ function MainHistory(props) {
             try {
                 const response = await OrderAPI.get_order(sessionStorage.getItem('id_user'))
                 
-                // Sort orders in descending order (newest first)
-                const sortedOrders = [...response].sort((a, b) => {
-                    // Extract date components
-                    const [aDay, aMonth, aYear] = a.create_time.split('/').map(Number);
-                    const [bDay, bMonth, bYear] = b.create_time.split('/').map(Number);
-                    
-                    // Create Date objects for comparison
-                    const dateA = new Date(aYear, aMonth - 1, aDay);
-                    const dateB = new Date(bYear, bMonth - 1, bDay);
-                    
-                    // Sort in descending order (newest first)
-                    return dateB - dateA;
-                });
+                // Reverse the order of the items to display them in the opposite order
+                const reversedResponse = [...response].reverse();
                 
                 // Xử lý các đơn hàng cũ một cách tuần tự
-                for (const order of sortedOrders) {
-                 
+                for (const order of reversedResponse) {
                     const [day, month, year] = order.create_time.split('/');
-                   const orderDate = new Date(year, month - 1, day); // month is 0-based in JS
-                   const currentDate = new Date();
+                    const orderDate = new Date(year, month - 1, day); // month is 0-based in JS
+                    const currentDate = new Date();
               
-                   // Reset time portions to midnight
-                   orderDate.setHours(0, 0, 0, 0);
-                   currentDate.setHours(0, 0, 0, 0);
+                    // Reset time portions to midnight
+                    orderDate.setHours(0, 0, 0, 0);
+                    currentDate.setHours(0, 0, 0, 0);
                    
-                   const diffTime = Math.abs(currentDate - orderDate);
-                   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    const diffTime = Math.abs(currentDate - orderDate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                  
                     if (diffDays > 1 && order.status === '1' && !order.pay&&order?.id_payment?.pay_name === "Momo") {
                         await deleteOrder(order._id, order.pay);
                     }
-                //     if (order.status === '5') {
-                //     const response_detail_order = await Detail_OrderAPI.get_detail_order(order._id)
-                //     if (response_detail_order && response_detail_order.length > 0) {
-                //         for (const detail of [...response_detail_order].reverse()) {
-                //             console.log(detail)
-                //             if (detail.id_product) {
-                //                 await handleSubmittupdatekho(detail.id_product);
-                //             }
-                //         }
-                //     }
-                //     set_detail_order(response_detail_order)
-                // }
-                   
                 }
-                 set_history(sortedOrders)
-
-                 
+                
+                // Set history with the reversed order
+                set_history(reversedResponse)
                 
             } catch (error) {
                 console.error("Error fetching or processing orders:", error);
@@ -96,20 +71,20 @@ function MainHistory(props) {
         setLoading(true);
         setMessage(''); // Reset message before the request
 
-        try {
-            // Gửi request đến API cập nhật kho
-            const response = await axios.patch('https://api.huytehuy.id.vn/api/admin/product/updateDepository1', {
-                _id: id,
-                count: count 
-            });
-            console.log(response);
+        // try {
+        //     // Gửi request đến API cập nhật kho
+        //     const response = await axios.patch('https://api.huytehuy.id.vn/api/admin/product/updateDepository1', {
+        //         _id: id,
+        //         count: count 
+        //     });
+        //     console.log(response);
 
-            setMessage(response.data.msg); // Set message to show success
-        } catch (error) {
-            setMessage(error.response?.data?.msg || 'Có lỗi xảy ra'); // Show error message if any
-        } finally {
-            setLoading(false);
-        }
+        //     setMessage(response.data.msg); // Set message to show success
+        // } catch (error) {
+        //     setMessage(error.response?.data?.msg || 'Có lỗi xảy ra'); // Show error message if any
+        // } finally {
+        //     setLoading(false);
+        // }
     };
 
     const [show_error, set_show_error] = useState(false)

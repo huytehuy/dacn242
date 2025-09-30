@@ -1,18 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Link, useParams } from 'react-router-dom';
-// import HistoryAPI from '../../API/HistoryAPI';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import './History.css'
 import OrderAPI from '../../API/OrderAPI';
 import Detail_OrderAPI from '../../API/Detail_OrderAPI';
-import NoteAPI from '../../API/NoteAPI';
 import MoMo from './MoMo.jsx'
 import LogoMomo from './momo-png/momo_icon_square_pinkbg_RGB.png'
-import axios from 'axios';
-
 import queryString from 'query-string'
-
-
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -22,6 +16,7 @@ function DetailHistory(props) {
     const { id } = useParams()
     const [orderID, setOrderID] = useState('')
     const [order, set_order] = useState({})
+    const { t } = useTranslation();
   
     const [detail_order, set_detail_order] = useState([])
     const [total_price, set_total_price] = useState(0)
@@ -107,20 +102,20 @@ function DetailHistory(props) {
         setLoading(true);
         setMessage(''); // Reset message before the request
 
-        try {
-            // Gửi request đến API cập nhật kho
-            const response = await axios.patch('https://api.huytehuy.id.vn/api/admin/product/updateDepository1', {
-                _id: id,
-                count: count
-            });
-            console.log(response);
+        // try {
+        //     // Gửi request đến API cập nhật kho
+        //     const response = await axios.patch('https://api.huytehuy.id.vn/api/admin/product/updateDepository1', {
+        //         _id: id,
+        //         count: count
+        //     });
+        //     console.log(response);
 
-            setMessage(response.data.msg); // Set message to show success
-        } catch (error) {
-            setMessage(error.response?.data?.msg || 'Có lỗi xảy ra'); // Show error message if any
-        } finally {
-            setLoading(false);
-        }
+        //     setMessage(response.data.msg); // Set message to show success
+        // } catch (error) {
+        //     setMessage(error.response?.data?.msg || 'Có lỗi xảy ra'); // Show error message if any
+        // } finally {
+        //     setLoading(false);
+        // }
     };
     const [show_error, set_show_error] = useState(false)
     const deleteOrder = async (id, pay, idpay) => {
@@ -191,7 +186,7 @@ function DetailHistory(props) {
     return (
         <div>
             <div className="container" style={{ paddingTop: '3rem' }}>
-                <h1>Order Details</h1>
+                <h1>{t('Order_Details')}</h1>
                 <ul>
                     <li style={{ fontSize: '1.1rem' }}>ID: <span>{order._id}</span></li>
                     <li style={{ fontSize: '1.1rem' }}>SĐT: <span>{order.id_note && order.id_note.phone}</span></li>

@@ -3,6 +3,7 @@ import axiosClient from './axiosClient'
 const Detail_OrderAPI = {
 
     post_detail_order: (data) => {
+        console.log("posted")
         const url = `/api/DetailOrder`
         return axiosClient.post(url, data)
     },
