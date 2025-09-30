@@ -130,7 +130,15 @@
   "Next": "Next",
   "shipping_information": "Shipping Information",
   "fullname_placeholder": "Enter your full name",
-  "fullname": "Full Name"
-
-
+  "fullname": "Full Name",
+  "MoMo": "Pay with MoMo",
+  "Paypal": "Pay with Paypal",
+  "SePay": "Pay with SePay",
+  "Cash": "Pay with Cash",
+  "QR": "Pay with QR Code",
+  "Select_Payment_Method": "Select Payment Method",
+  "Please_check_your_information_before_proceeding_with_payment": "Please check your information before proceeding with payment",
+  "Checkout": "Checkout",
+  "Order_Total": "Order Total",
+  "minutes": "minutes"
 }

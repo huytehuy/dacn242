@@ -124,5 +124,15 @@
   "view_coupon": "Xem mã giảm giá",
   "shipping_information": "Thông tin vận chuyển",
   "fullname_placeholder": "Nhập họ và tên",
-  "fullname": "Họ và tên"
+  "fullname": "Họ và tên",
+  "MoMo": "Thanh toán với MoMo",
+  "Paypal": "Thanh toán với Paypal",
+  "SePay": "Thanh toán với SePay",
+  "Cash": "Thanh toán với tiền mặt",
+  "QR": "Thanh toán với mã QR",
+  "Select_Payment_Method": "Chọn phương thức thanh toán",
+  "Please_check_your_information_before_proceeding_with_payment": "Vui lòng kiểm tra thông tin của bạn trước khi tiến hành thanh toán",
+  "Checkout": "Thanh toán",
+  "Order_Total": "Tổng đơn hàng",
+  "minutes": "phút"
 }

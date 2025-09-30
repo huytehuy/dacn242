@@ -428,12 +428,12 @@ function SePay({ information, total, from, distance, duration, price }) {
                     marginBottom: '10px'
                 }}
             >
-                {isProcessing ? t('Processing...') : t('Pay with QR Code')}
+                {isProcessing ? t('Processing...') : t('QR')}
             </button>
             
-            <div style={{ marginTop: '10px', fontSize: '0.9rem', color: '#666' }}>
+            {/* <div style={{ marginTop: '10px', fontSize: '0.9rem', color: '#666' }}>
                 {t('Secure payment via SePay')}
-            </div>
+            </div> */}
 
             {/* QR Code Modal - Updated to match the screenshot */}
             <Modal

@@ -96,22 +96,23 @@ function Checkout() {
         if (localStorage.getItem('coupon')) {
             // GET localStorage
             const coupon = JSON.parse(localStorage.getItem('coupon'))
-
+            
             set_discount((total * parseInt(coupon.promotion)) / 100)
 
-            const newTotal = total - ((total * parseInt(coupon.promotion)) / 100) + Number(price)
+            // Ensure price is treated as a number in calculations
+            const numericPrice = Number(price)
+            const newTotal = total - ((total * parseInt(coupon.promotion)) / 100) + numericPrice
 
             localStorage.setItem("total_price", newTotal)
 
             set_total_price(newTotal)
         } else {
+            // Ensure price is treated as a number in calculations
+            const numericPrice = Number(price)
+            localStorage.setItem("total_price", total + numericPrice)
 
-            localStorage.setItem("total_price", total + Number(price))
-
-            set_total_price(total + Number(price))
-
+            set_total_price(total + numericPrice)
         }
-
     }
 
     const [show_error, set_show_error] = useState(false)
@@ -343,10 +344,13 @@ function Checkout() {
         // set_duration(duration_text)
         set_duration(1)
 
+        // Convert from string like "30.000" to integer 30000
+        const numericPrice = price_shipping.replace(/\./g, '')
+        
         // localStorage.setItem('price', price_shipping)
-        localStorage.setItem('price', price_shipping)
+        localStorage.setItem('price', numericPrice)
         // set_price(price_shipping)
-        set_price(price_shipping)
+        set_price(numericPrice)
 
         set_information({
             fullname: information.fullname,
@@ -452,7 +456,7 @@ function Checkout() {
                                                 </div>
                                                 <div>
                                                     <label htmlFor="Duration">{t('duration')}:</label>&nbsp;
-                                                        <label id="duration_text">15 phút</label>
+                                                        <label id="duration_text">15 {t('minutes')}</label>
                                                 </div>
                                                 <div>
                                                     <label htmlFor="Price">{t('shipping_fee')}:</label>&nbsp;
@@ -574,23 +578,23 @@ function Checkout() {
                                                         carts && carts.map(value => (
                                                             <tr className="cart_item" key={value._id}>
                                                                 <td className="cart-product-name">{value.name_product}<strong className="product-quantity"> × {value.count}</strong></td>
-                                                                <td className="cart-product-total"><span className="amount">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(parseInt(value.price_product) * parseInt(value.count)) + ' VNĐ'}</span></td>
+                                                                <td className="cart-product-total"><span className="amount">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(Number(parseInt(value.price_product) * parseInt(value.count))) + ' VNĐ'}</span></td>
                                                             </tr>
                                                         ))
                                                     }
                                                 </tbody>
                                                 <tfoot>
                                                     <tr className="cart-subtotal">
-                                                        <th>Phí giao hàng</th>
-                                                        <td><span className="amount">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(price) + ' VNĐ'}</span></td>
+                                                        <th>{t('shipping_fee')}</th>
+                                                        <td><span className="amount">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(Number(price)) + ' VNĐ'}</span></td>
                                                     </tr>
                                                     <tr className="cart-subtotal">
-                                                        <th>Giảm giá</th>
-                                                        <td><span className="amount">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(discount) + ' VNĐ'}</span></td>
+                                                        <th>{t('Discount')}</th>
+                                                        <td><span className="amount">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(Number(discount)) + ' VNĐ'}</span></td>
                                                     </tr>
                                                     <tr className="order-total">
-                                                        <th>Tổng hóa đơn</th>
-                                                        <td><strong><span className="amount">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(total_price) + ' VNĐ'}</span></strong></td>
+                                                        <th>{t('Order_Total')}</th>
+                                                        <td><strong><span className="amount">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(Number(total_price)) + ' VNĐ'}</span></strong></td>
                                                     </tr>
                                                 </tfoot>
                                             </table>
@@ -603,17 +607,16 @@ function Checkout() {
                                                 borderBottom: '1px solid #e5e5e5',
                                                 paddingBottom: '8px'
                                             }}>
-                                                {t('Select Payment Method')}
+                                                {t('Select_Payment_Method')}
                                             </h4>
                                             
                                             {show_error ? (
                                                 <div className="alert alert-warning" role="alert" style={{ padding: '8px 12px', fontSize: '14px' }}>
-                                                    {t('Please check your information before proceeding with payment')}
+                                                    {t('Please_check_your_information_before_proceeding_with_payment')}
                                                 </div>
                                             ) : (
                                                 <div className="payment-options" style={{
                                                     display: 'flex',
-                                                    flexWrap: 'wrap',
                                                     gap: '10px',
                                                     justifyContent: 'space-between'
                                                 }}>
@@ -660,167 +663,162 @@ function Checkout() {
                                                                 fontSize: '0.75rem', 
                                                                 color: '#6c757d' 
                                                             }}>
-                                                                {t('Safe and secure payments via PayPal')}
+                                                                {t('PayPal')}
                                                             </div>
                                                         </div>
                                                     </div>
                                                     
-                                                    {/* Cash on Delivery - Moved up to replace Credit Card */}
-                                                    <div className="payment-option-item" style={{
-                                                        marginBottom: '10px',
-                                                        background: '#f8f9fa',
-                                                        border: '1px solid #e9ecef',
-                                                        borderRadius: '6px',
-                                                        overflow: 'hidden',
-                                                        width: 'calc(50% - 5px)'  // Take up half the width minus gap
+                                                    {/* Group for MoMo, Cash and SePay */}
+                                                    <div className="payment-option-group" style={{
+                                                        width: 'calc(50% - 5px)', // Take up half the width minus gap
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        gap: '10px'
                                                     }}>
-                                                        <div className="payment-header" style={{
-                                                            padding: '8px 12px',
-                                                            backgroundColor: '#f1f3f5',
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            cursor: 'pointer'
+                                                        {/* Cash on Delivery */}
+                                                        <div className="payment-option-item" style={{
+                                                            background: '#f8f9fa',
+                                                            border: '1px solid #e9ecef',
+                                                            borderRadius: '6px',
+                                                            overflow: 'hidden'
                                                         }}>
-                                                            <i className="fa fa-money" style={{ 
-                                                                fontSize: '16px', 
-                                                                marginRight: '10px',
-                                                                width: '30px',
-                                                                textAlign: 'center',
-                                                                color: '#28a745'
-                                                            }}></i>
-                                                            <span style={{ fontWeight: '500', fontSize: '14px' }}>{t('Cash on Delivery')}</span>
-                                                        </div>
-                                                        <div className="payment-content" style={{
-                                                            padding: '10px',
-                                                            textAlign: 'center'
-                                                        }}>
-                                                            <button 
-                                                                onClick={handleSubmit(handler_Checkout)}
-                                                                className="btn" 
-                                                                style={{
-                                                                    backgroundColor: '#28a745',
-                                                                    color: 'white',
-                                                                    padding: '6px 12px',
-                                                                    width: '100%',
-                                                                    maxWidth: '100%',
-                                                                    borderRadius: '4px',
-                                                                    border: 'none',
-                                                                    cursor: 'pointer',
-                                                                    fontSize: '14px'
-                                                                }}
-                                                            >
-                                                                {t('Pay with Cash on Delivery')}
-                                                            </button>
-                                                            <div style={{ 
-                                                                marginTop: '6px', 
-                                                                fontSize: '0.75rem', 
-                                                                color: '#6c757d' 
+                                                            <div className="payment-header" style={{
+                                                                padding: '8px 12px',
+                                                                backgroundColor: '#f1f3f5',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                cursor: 'pointer'
                                                             }}>
-                                                                {t('Pay when you receive your order')}
+                                                                <i className="fa fa-money" style={{ 
+                                                                    fontSize: '16px', 
+                                                                    marginRight: '10px',
+                                                                    width: '30px',
+                                                                    textAlign: 'center',
+                                                                    color: '#28a745'
+                                                                }}></i>
+                                                                <span style={{ fontWeight: '500', fontSize: '14px' }}>{t('Cash on Delivery')}</span>
+                                                            </div>
+                                                            <div className="payment-content" style={{
+                                                                padding: '10px',
+                                                                textAlign: 'center'
+                                                            }}>
+                                                                <button 
+                                                                    onClick={handleSubmit(handler_Checkout)}
+                                                                    className="btn" 
+                                                                    style={{
+                                                                        backgroundColor: '#28a745',
+                                                                        color: 'white',
+                                                                        padding: '6px 12px',
+                                                                        width: '100%',
+                                                                        maxWidth: '100%',
+                                                                        borderRadius: '4px',
+                                                                        border: 'none',
+                                                                        cursor: 'pointer',
+                                                                        fontSize: '14px'
+                                                                    }}
+                                                                >
+                                                                    {t('Cash')}
+                                                                </button>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    
-                                                    {/* MoMo */}
-                                                    <div className="payment-option-item" style={{
-                                                        marginBottom: '10px',
-                                                        background: '#f8f9fa',
-                                                        border: '1px solid #e9ecef',
-                                                        borderRadius: '6px',
-                                                        overflow: 'hidden',
-                                                        width: 'calc(50% - 5px)'  // Take up half the width minus gap
-                                                    }}>
-                                                        <div className="payment-header" style={{
-                                                            padding: '8px 12px',
-                                                            backgroundColor: '#f1f3f5',
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            cursor: 'pointer'
+                                                        
+                                                        {/* MoMo */}
+                                                        <div className="payment-option-item" style={{
+                                                            background: '#f8f9fa',
+                                                            border: '1px solid #e9ecef',
+                                                            borderRadius: '6px',
+                                                            overflow: 'hidden'
                                                         }}>
-                                                            <img 
-                                                                src={LogoMomo} 
-                                                                alt="MoMo" 
-                                                                style={{ 
-                                                                    width: '30px', 
-                                                                    marginRight: '10px',
-                                                                    borderRadius: '4px'
-                                                                }} 
-                                                            />
-                                                            <span style={{ fontWeight: '500', fontSize: '14px' }}>MoMo</span>
+                                                            <div className="payment-header" style={{
+                                                                padding: '8px 12px',
+                                                                backgroundColor: '#f1f3f5',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                cursor: 'pointer'
+                                                            }}>
+                                                                <img 
+                                                                    src={LogoMomo} 
+                                                                    alt="MoMo" 
+                                                                    style={{ 
+                                                                        width: '30px', 
+                                                                        marginRight: '10px',
+                                                                        borderRadius: '4px'
+                                                                    }} 
+                                                                />
+                                                                <span style={{ fontWeight: '500', fontSize: '14px' }}>MoMo</span>
+                                                            </div>
+                                                            <div className="payment-content" style={{
+                                                                padding: '10px'
+                                                            }}>
+                                                                <button 
+                                                                    className="btn" 
+                                                                    onClick={handlerMomo}
+                                                                    style={{
+                                                                        backgroundColor: '#a50064',
+                                                                        color: 'white',
+                                                                        padding: '6px 12px',
+                                                                        width: '100%',
+                                                                        maxWidth: '100%',
+                                                                        borderRadius: '4px',
+                                                                        border: 'none',
+                                                                        cursor: 'pointer',
+                                                                        fontSize: '14px',
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        justifyContent: 'center',
+                                                                        margin: '0 auto'
+                                                                    }}
+                                                                >
+                                                                    {t('MoMo')}
+                                                                </button>
+                                                                <div style={{ display: 'none' }}>
+                                                                    <MoMo
+                                                                        orderID={orderID}
+                                                                        total={total_price}
+                                                                    />
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div className="payment-content" style={{
-                                                            padding: '10px'
+                                                        
+                                                        {/* SePay */}
+                                                        <div className="payment-option-item" style={{
+                                                            background: '#f8f9fa',
+                                                            border: '1px solid #e9ecef',
+                                                            borderRadius: '6px',
+                                                            overflow: 'hidden'
                                                         }}>
-                                                            <button 
-                                                                className="btn" 
-                                                                onClick={handlerMomo}
-                                                                style={{
-                                                                    backgroundColor: '#a50064',
-                                                                    color: 'white',
-                                                                    padding: '6px 12px',
-                                                                    width: '100%',
-                                                                    maxWidth: '100%',
-                                                                    borderRadius: '4px',
-                                                                    border: 'none',
-                                                                    cursor: 'pointer',
-                                                                    fontSize: '14px',
-                                                                    display: 'flex',
-                                                                    alignItems: 'center',
-                                                                    justifyContent: 'center',
-                                                                    margin: '0 auto'
-                                                                }}
-                                                            >
-                                                                {t('Pay with MoMo')}
-                                                            </button>
-                                                            <div style={{ display: 'none' }}>
-                                                                <MoMo
-                                                                    orderID={orderID}
+                                                            <div className="payment-header" style={{
+                                                                padding: '8px 12px',
+                                                                backgroundColor: '#f1f3f5',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                cursor: 'pointer'
+                                                            }}>
+                                                                <img 
+                                                                    src={LogoSepay} 
+                                                                    alt="SePay" 
+                                                                    style={{ 
+                                                                        width: '30px', 
+                                                                        marginRight: '10px',
+                                                                        borderRadius: '4px'
+                                                                    }} 
+                                                                />
+                                                                <span style={{ fontWeight: '500', fontSize: '14px' }}>SePay</span>
+                                                            </div>
+                                                            <div className="payment-content" style={{
+                                                                padding: '10px',
+                                                                display: 'flex',
+                                                                justifyContent: 'center'
+                                                            }}>
+                                                                <SePay
+                                                                    information={information}
                                                                     total={total_price}
+                                                                    from={from}
+                                                                    distance={distance}
+                                                                    duration={duration}
+                                                                    price={price}
                                                                 />
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    {/* SePay */}
-                                                    <div className="payment-option-item" style={{
-                                                        marginBottom: '10px',
-                                                        background: '#f8f9fa',
-                                                        border: '1px solid #e9ecef',
-                                                        borderRadius: '6px',
-                                                        overflow: 'hidden',
-                                                        width: 'calc(50% - 5px)'  // Take up half the width minus gap
-                                                    }}>
-                                                        <div className="payment-header" style={{
-                                                            padding: '8px 12px',
-                                                            backgroundColor: '#f1f3f5',
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            cursor: 'pointer'
-                                                        }}>
-                                                            <img 
-                                                                src={LogoSepay} 
-                                                                alt="SePay" 
-                                                                style={{ 
-                                                                    width: '30px', 
-                                                                    marginRight: '10px',
-                                                                    borderRadius: '4px'
-                                                                }} 
-                                                            />
-                                                            <span style={{ fontWeight: '500', fontSize: '14px' }}>SePay</span>
-                                                        </div>
-                                                        <div className="payment-content" style={{
-                                                            padding: '10px',
-                                                            display: 'flex',
-                                                            justifyContent: 'center'
-                                                        }}>
-                                                            <SePay
-                                                                information={information}
-                                                                total={total_price}
-                                                                from={from}
-                                                                distance={distance}
-                                                                duration={duration}
-                                                                price={price}
-                                                            />
                                                         </div>
                                                     </div>
                                                 </div>
