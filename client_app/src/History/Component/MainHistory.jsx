@@ -21,10 +21,23 @@ function MainHistory(props) {
 
             try {
                 const response = await OrderAPI.get_order(sessionStorage.getItem('id_user'))
-                console.log(response)
+                
+                // Sort orders in descending order (newest first)
+                const sortedOrders = [...response].sort((a, b) => {
+                    // Extract date components
+                    const [aDay, aMonth, aYear] = a.create_time.split('/').map(Number);
+                    const [bDay, bMonth, bYear] = b.create_time.split('/').map(Number);
+                    
+                    // Create Date objects for comparison
+                    const dateA = new Date(aYear, aMonth - 1, aDay);
+                    const dateB = new Date(bYear, bMonth - 1, bDay);
+                    
+                    // Sort in descending order (newest first)
+                    return dateB - dateA;
+                });
+                
                 // Xử lý các đơn hàng cũ một cách tuần tự
-             
-                for (const order of response) {
+                for (const order of sortedOrders) {
                  
                     const [day, month, year] = order.create_time.split('/');
                    const orderDate = new Date(year, month - 1, day); // month is 0-based in JS
@@ -37,7 +50,7 @@ function MainHistory(props) {
                    const diffTime = Math.abs(currentDate - orderDate);
                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                  
-                    if (diffDays > 1 && order.status === '1' && !order.pay&&order.id_payment.pay_name === "Momo") {
+                    if (diffDays > 1 && order.status === '1' && !order.pay&&order?.id_payment?.pay_name === "Momo") {
                         await deleteOrder(order._id, order.pay);
                     }
                 //     if (order.status === '5') {
@@ -54,7 +67,7 @@ function MainHistory(props) {
                 // }
                    
                 }
-                 set_history(response)
+                 set_history(sortedOrders)
 
                  
                 
