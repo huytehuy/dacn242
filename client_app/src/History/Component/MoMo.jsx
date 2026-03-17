@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import crypto from '../../polyfills/crypto-browserify';
@@ -18,13 +18,12 @@ MoMo.defaultProps = {
 
 
 function MoMo(props) {
-
-    const [error, setError] = useState(false)
-
     const { orderID, total, id_order } = props
 
 
     useEffect(() => {
+        if (!orderID) return
+
         const path = "https://test-payment.momo.vn/gw_payment/transactionProcessor"
         const partnerCode = "MOMOAE9T20220513"
         const accessKey = "aCM4gfrPKBmFwNBa"
@@ -59,10 +58,7 @@ function MoMo(props) {
         axios.post(path, body)
             .then((response) => {
                 if (response.data.errorCode !== 0) {
-                    setError(true)
-                    setTimeout(() => {
-                        setError(false)
-                    }, 1500)
+                    return
                 } else {
 
                     window.location.href = response.data.payUrl
@@ -72,7 +68,7 @@ function MoMo(props) {
             .catch(error => {
                 console.error('There was an error!', error);
             })
-    }, [orderID])
+    }, [orderID, total, id_order])
 
     return (
         <div>

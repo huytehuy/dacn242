@@ -113,11 +113,11 @@ function Header(props) {
             const action = changeCount(count)
             dispatch(action)
         }
-    }, [count])
+    }, [count, dispatch])
 
     // Hàm này là hàm con chia ra để xử lý
     function showData(carts, sum, price) {
-        carts.map(value => {
+        carts.forEach(value => {
             sum += value.count
             price += parseInt(value.price_product) * parseInt(value.count)
         })
@@ -172,7 +172,7 @@ function Header(props) {
             );
         })
         return new_data
-    }, [keyword_search])
+    }, [keyword_search, products])
     const handler_search = (e) => {
         e.preventDefault()
         // Đưa vào redux để qua bên trang search lấy query tìm kiếm
@@ -293,7 +293,7 @@ function Header(props) {
                             <div className="col-lg-3">
                             	<div className="logo pb-sm-30 pb-xs-30">
                             		<Link to="/">
-                            			<img src={logo} style={{ width: '5rem' }} />
+                                			<img src={logo} style={{ width: '5rem' }} alt="HUYTEHUY" />
                             		</Link>
                             	</div>
                             </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './History.css'
 import OrderAPI from '../../API/OrderAPI';
@@ -19,9 +19,31 @@ function DetailHistory(props) {
     const { t } = useTranslation();
   
     const [detail_order, set_detail_order] = useState([])
-    const [total_price, set_total_price] = useState(0)
-    const [note, set_note] = useState({})
     const baseURL = 'https://shop.huytehuy.id.vn';
+
+    const deleteOrder = useCallback(async (id, pay, idpay) => {
+        if (pay === true && idpay === "Momo") {
+            return
+        }
+
+        const params = {
+            id: id
+        }
+
+        const query = '?' + queryString.stringify(params)
+
+        await OrderAPI.cancel_order(query)
+    }, [])
+
+    const updateOrder = useCallback(async (id) => {
+        const params = {
+            id: id
+        }
+
+        const query = '?' + queryString.stringify(params)
+
+        await OrderAPI.completeO(query)
+    }, [])
 
     useEffect(() => {
 
@@ -67,7 +89,7 @@ function DetailHistory(props) {
             clearInterval(intervalId)
         }
 
-    }, [])
+    }, [deleteOrder, id, updateOrder])
     const handlerMomo = () => {
 
         setOrderID(Math.random().toString())
@@ -93,76 +115,6 @@ function DetailHistory(props) {
 
 
     }
-    const [productId, setProductId] = useState('');
-    const [message, setMessage] = useState('');
-    const [loading, setLoading] = useState(false);
-
-    const handleSubmittupdatekho = async (id, count) => {
-        //e.preventDefault();
-        setLoading(true);
-        setMessage(''); // Reset message before the request
-
-        // try {
-        //     // Gửi request đến API cập nhật kho
-        //     const response = await axios.patch('https://dacn242-server.onrender.com/api/admin/product/updateDepository1', {
-        //         _id: id,
-        //         count: count
-        //     });
-        //     console.log(response);
-
-        //     setMessage(response.data.msg); // Set message to show success
-        // } catch (error) {
-        //     setMessage(error.response?.data?.msg || 'Có lỗi xảy ra'); // Show error message if any
-        // } finally {
-        //     setLoading(false);
-        // }
-    };
-    const [show_error, set_show_error] = useState(false)
-    const deleteOrder = async (id, pay, idpay) => {
-
-        if (pay === true && idpay === "Momo") {
-            set_show_error(true)
-
-            setTimeout(() => {
-                set_show_error(false)
-            }, 2000)
-            return
-        }
-
-        if (!show_error) {
-            const params = {
-                id: id
-            }
-
-            const query = '?' + queryString.stringify(params)
-
-            const response = await OrderAPI.cancel_order(query)
-
-
-
-
-
-        }
-    }
-    const updateOrder = async (id) => {
-
-
-        if (!show_error) {
-            const params = {
-                id: id
-            }
-
-            const query = '?' + queryString.stringify(params)
-
-            const response = await OrderAPI.completeO(query)
-
-
-
-
-
-        }
-    }
-
     const handleReturnConfirm = async (id) => {
 
         console.log('order._id:', id)
@@ -202,34 +154,34 @@ function DetailHistory(props) {
                                 <div className="w-100 d-flex justify-content-center">
                                     <div className={parseInt(order.status) > 0 && 'bg_status_delivery_active'}></div>
                                 </div>
-                                <a className="a_status_delivery">Đang xử lý</a>
+                                <span className="a_status_delivery">Đang xử lý</span>
                             </div>
 
                             <div className="detail_status_delivery">
                                 <div className="w-100 d-flex justify-content-center">
                                     <div className={parseInt(order.status) > 1 ? 'bg_status_delivery_active' : 'bg_status_delivery'}></div>
                                 </div>
-                                <a className="a_status_delivery">Đã xác nhận</a>
+                                <span className="a_status_delivery">Đã xác nhận</span>
                             </div>
 
                             <div className="detail_status_delivery">
                                 <div className="w-100 d-flex justify-content-center">
                                     <div className={parseInt(order.status) > 2 ? 'bg_status_delivery_active' : 'bg_status_delivery'}></div>
                                 </div>
-                                <a className="a_status_delivery">Đang vận chuyển</a>
+                                <span className="a_status_delivery">Đang vận chuyển</span>
                             </div>
 
                             <div className="detail_status_delivery">
                                 <div className="w-100 d-flex justify-content-center">
                                     <div className={parseInt(order.status) > 3 ? 'bg_status_delivery_active' : 'bg_status_delivery'}></div>
                                 </div>
-                                <a className="a_status_delivery">Hoàn Thành</a>
+                                <span className="a_status_delivery">Hoàn Thành</span>
                             </div>
                             <div className="detail_status_delivery">
                                 <div className="w-100 d-flex justify-content-center">
                                     <div className={parseInt(order.status) === 7 ? 'bg_status_delivery_active' : 'bg_status_delivery'}></div>
                                 </div>
-                                <a className="a_status_delivery">Trả hàng</a>
+                                <span className="a_status_delivery">Trả hàng</span>
                             </div>
                         </div>
                     </div>
@@ -259,7 +211,7 @@ function DetailHistory(props) {
                                             {
                                                 detail_order && detail_order.map((value,index) => (
                                                     <tr key={value._id}>
-                                                        <td className="li-product-thumbnail"><img src={value.id_product.image} style={{ width: '5rem' }} alt="Li's Product Image" /></td>
+                                                        <td className="li-product-thumbnail"><img src={value.id_product.image} style={{ width: '5rem' }} alt={value.name_product} /></td>
                                                         <td className="li-product-name"><a href={`${baseURL}/detail/${value.id_product._id}`}>{value.name_product}</a></td>
                                                         <td className="li-product-price"><span className="amount">{new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(value.price_product) + ' VNĐ'}</span></td>
                                                         <td className="li-product-price"><span className="amount">{value.count}</span></td>
@@ -277,7 +229,7 @@ function DetailHistory(props) {
                                                                                 return <>
                                                                                     <span >Vui lòng thanh toán đơn hàng</span><br></br >
                                                                                     <div>
-                                                                                        <img src={LogoMomo} width="100" onClick={handlerMomo}
+                                                                                        <img src={LogoMomo} width="100" onClick={handlerMomo} alt="MoMo"
                                                                                             style={{ cursor: 'pointer' }} />
                                                                                         <MoMo
                                                                                             orderID={orderID}
