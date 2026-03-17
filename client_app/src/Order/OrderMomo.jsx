@@ -7,7 +7,6 @@ import NoteAPI from '../API/NoteAPI';
 import OrderAPI from '../API/OrderAPI';
 import Detail_OrderAPI from '../API/Detail_OrderAPI';
 import io from "socket.io-client";
-import axios from 'axios';
 const socket = io('https://dacn242-server.onrender.com', {
     transports: ['websocket'], jsonp: false
 });
@@ -55,7 +54,7 @@ function OrderMomo(props) {
                 setNote("Information Request Invalid")
                 return;
             }
-            if (errorCode == 0) {
+            if (errorCode === '0') {
 
                 if (!information)
                 {
@@ -64,7 +63,7 @@ function OrderMomo(props) {
                 }
                
                 if (localStorage.getItem("id_coupon")){
-                    const responseUpdate = await CouponAPI.updateCoupon(localStorage.getItem("id_coupon"))
+                    await CouponAPI.updateCoupon(localStorage.getItem("id_coupon"))
                 }
 
                 // data Note
@@ -165,7 +164,7 @@ function OrderMomo(props) {
                     }
     
                     if (localStorage.getItem("id_coupon")){
-                        const responseUpdate = await CouponAPI.updateCoupon(localStorage.getItem("id_coupon"))
+                        await CouponAPI.updateCoupon(localStorage.getItem("id_coupon"))
                     }
                     
                     // data Note
@@ -209,8 +208,8 @@ function OrderMomo(props) {
                             count: data_carts[i].count,
                             size: data_carts[i].size
                         }
-                        
-                        // await Detail_OrderAPI.post_detail_order(data_detail_order)
+
+                        await Detail_OrderAPI.post_detail_order(data_detail_order)
                         // const response = await axios.patch('https://dacn242-server.onrender.com/api/admin/product/updateDepository', {
                         //     _id: data_detail_order.id_product,
                           
@@ -256,7 +255,7 @@ function OrderMomo(props) {
         }
         fetchData()
 
-    }, [])
+    }, [count_change, dispatch, search])
 
     return (
         <div className="container fix_order">

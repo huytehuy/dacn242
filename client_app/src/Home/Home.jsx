@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Home_Category from './Component/Home_Category';
-import Home_Product from './Component/Home_Product';
+import HomeCategory from './Component/Home_Category';
+import HomeProduct from './Component/Home_Product';
 import Product from '../API/Product';
 import { changeCount } from '../Redux/Action/ActionCount';
 import { useDispatch, useSelector } from 'react-redux';
@@ -75,7 +75,7 @@ function Home() {
     }
 
     function SetArray(product) {
-        product && product.map((index) => { productTemp.push(index.gender) })
+        product && product.forEach((index) => { productTemp.push(index.gender) })
     }
     SetArray(product);
     // Hàm này dùng để giảm số lượng
@@ -117,7 +117,7 @@ function Home() {
                     </div>
                 </div>
             </div>
-            <Home_Category GET_id_modal={GET_id_modal} />
+            <HomeCategory GET_id_modal={GET_id_modal} />
             <div className="li-static-banner">
                 <div className="container">
                     <div className="row">
@@ -146,10 +146,10 @@ function Home() {
                 </div>
             </div>
             {/*Sửa Nhà bếp thành Điện Thoại */}
-            <Home_Product gender={`Điện Thoại`} category={'655a1c5423f28980f81145c7'} GET_id_modal={GET_id_modal} />
-            <Home_Product gender={`Tủ Lạnh`} category={'65a2232ac177c63bbf7896c9'} GET_id_modal={GET_id_modal} />
-            <Home_Product gender={`TV`} category={'65a2238ec177c63bbf794e27'} GET_id_modal={GET_id_modal} />
-            <Home_Product gender={`Máy Giặt`} category={'65a223ebc177c63bbf7a11bc'} GET_id_modal={GET_id_modal} />
+            <HomeProduct gender={`Điện Thoại`} category={'655a1c5423f28980f81145c7'} GET_id_modal={GET_id_modal} />
+            <HomeProduct gender={`Tủ Lạnh`} category={'65a2232ac177c63bbf7896c9'} GET_id_modal={GET_id_modal} />
+            <HomeProduct gender={`TV`} category={'65a2238ec177c63bbf794e27'} GET_id_modal={GET_id_modal} />
+            <HomeProduct gender={`Máy Giặt`} category={'65a223ebc177c63bbf7a11bc'} GET_id_modal={GET_id_modal} />
 
             <div className="modal fade modal-wrapper" id={id_modal} >
                 <div className="modal-dialog modal-dialog-centered" role="document">
@@ -163,7 +163,7 @@ function Home() {
                                     <div className="product-details-left" style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: 'center' }}>
                                         <div className="product-details-images slider-navigation-1">
                                             <div className="lg-image" >
-                                                <img style={{ height: 450, objectFit: 'contain' }} src={product_detail.image} alt="product image" />
+                                                <img style={{ height: 450, objectFit: 'contain' }} src={product_detail.image} alt={product_detail?.name_product || 'Product'} />
                                             </div>
                                         </div>
                                     </div>

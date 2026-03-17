@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import queryString from 'query-string'
 import Product from '../API/Product';
 import './index.css'
@@ -22,9 +21,9 @@ function Imgsearch(props) {
     const { t } = useTranslation();
     const { sort } = props
     const [products, set_products] = useState([])
-    const [page, set_page] = useState(1)
+    const [page] = useState(1)
 
-    const [show_load, set_show_load] = useState(true)
+    const [, set_show_load] = useState(true)
 
     useEffect(() => {
 
@@ -56,7 +55,7 @@ function Imgsearch(props) {
 
     }, [page])
     const [file, setFile] = useState(null);
-    const [predictions, setPredictions] = useState(null);
+    const [, setPredictions] = useState(null);
     const [products1, setProducts1] = useState(null);  // Thay đổi biến từ products thành products1
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -175,7 +174,7 @@ function Imgsearch(props) {
                                                         <div className="product-image" style={{ width: '100%', textAlign: 'center' }}>
                                                             <img
                                                                 src={value.image}
-                                                                alt="Li's Product Image"
+                                                                alt={value.name_product}
                                                                 style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '6px' }}
                                                             />
                                                             <span className="sticker">{t("New")}</span>
