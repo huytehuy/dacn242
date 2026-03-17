@@ -19,7 +19,8 @@ module.exports = function override(config) {
     "zlib": require.resolve("browserify-zlib"),
     "util": require.resolve("util"),
     "assert": require.resolve("assert"),
-    "url": require.resolve("url")
+    "url": require.resolve("url"),
+    "vm": require.resolve("vm-browserify")
   });
   
   // Thêm plugins

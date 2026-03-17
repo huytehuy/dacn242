@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import Global from '../Image/HUYTEHUY.png'
 
 Footer.propTypes = {
@@ -41,10 +42,10 @@ function Footer(props) {
                                 <div className="footer-block">
                                     <h3 className="footer-block-title">{t('products')}</h3>
                                     <ul>
-                                        <li><a href="#">{t('discount')}</a></li>
-                                        <li><a href="#">{t('new_products')}</a></li>
-                                        <li><a href="#">{t('best_selling')}</a></li>
-                                        <li><a href="#">{t('contact')}</a></li>
+                                        <li><Link to="/shop/all">{t('discount')}</Link></li>
+                                        <li><Link to="/shop/all">{t('new_products')}</Link></li>
+                                        <li><Link to="/shop/all">{t('best_selling')}</Link></li>
+                                        <li><Link to="/contact">{t('contact')}</Link></li>
                                     </ul>
                                 </div>
                             </div>
@@ -52,10 +53,10 @@ function Footer(props) {
                                 <div className="footer-block">
                                     <h3 className="footer-block-title">{t('company')}</h3>
                                     <ul>
-                                        <li><a href="#">{t('delivery')}</a></li>
-                                        <li><a href="#">{t('legal_notice')}</a></li>
-                                        <li><a href="#">{t('about_us')}</a></li>
-                                        <li><a href="#">{t('contact')}</a></li>
+                                        <li><Link to="/contact">{t('delivery')}</Link></li>
+                                        <li><Link to="/contact">{t('legal_notice')}</Link></li>
+                                        <li><Link to="/">{t('about_us')}</Link></li>
+                                        <li><Link to="/contact">{t('contact')}</Link></li>
                                     </ul>
                                 </div>
                             </div>
