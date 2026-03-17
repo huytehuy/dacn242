@@ -45,19 +45,19 @@ function Shop() {
 
     // Thêm handler cho việc lọc theo brand
     const handleBrandFilter = (e) => {
-        setPagination({
-            ...pagination,
+        setPagination((prev) => ({
+            ...prev,
             page: '1',
             brand: e.target.value
-        });
+        }));
     };
 
     // Thêm hàm xử lý sort
     const handleSortChange = (e) => {
-        setPagination({
-            ...pagination,
+        setPagination((prev) => ({
+            ...prev,
             sort: e.target.value
-        })
+        }))
     }
 
     //Hàm này dùng để thay đổi state pagination.page
@@ -81,12 +81,12 @@ function Shop() {
         const fetchData = async () => {
 
             const params = {
-                page: pagination.page,
-                count: pagination.count,
-                search: pagination.search,
+                page: '1',
+                count: '9',
+                search: '',
                 category: id,
-                sort: pagination.sort,
-                brand: pagination.brand
+                sort: 'default',
+                brand: ''
             }
 
             const query = '?' + queryString.stringify(params)
@@ -106,7 +106,7 @@ function Shop() {
             const response_total_page = await Product.Get_Category_Product(query_total_page)
 
             //Tính tổng số trang = tổng số sản phẩm / số lượng sản phẩm 1 trang
-            const totalPage = Math.ceil(parseInt(response_total_page.length) / parseInt(pagination.count))
+            const totalPage = Math.ceil(parseInt(response_total_page.length) / 9)
 
             setTotalPage(totalPage)
 
@@ -140,7 +140,7 @@ function Shop() {
 
         fetchData()
 
-    }, [pagination])
+    }, [pagination, id])
 
 
     const [male, set_male] = useState([])

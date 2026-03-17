@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router-dom';
 
 Pagination.propTypes = {
     pagination: PropTypes.object,
@@ -69,7 +68,13 @@ function Pagination(props) {
             {
                 indexPage && indexPage.map(value => (
                     <li className={value === parseInt(page) ? "active" : ''}>
-                        <a style={{ cursor: 'pointer' }} onClick={() => onChangeIndex(value)}>{value}</a>
+                        <button
+                            type="button"
+                            style={{ cursor: 'pointer', background: 'transparent', border: 'none' }}
+                            onClick={() => onChangeIndex(value)}
+                        >
+                            {value}
+                        </button>
                     </li>
                 ))
             }

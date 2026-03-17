@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import SaleAPI from '../../API/SaleAPI';
@@ -42,7 +42,7 @@ function Products(props) {
                         <div className="single-product-wrap">
                             <div className="product-image">
                                 <Link to={`/detail/${value._id}`}>
-                                    <img style={{height:250,objectFit: 'contain'}}src={value.image} alt="Li's Product Image" />
+                                    <img style={{height:250,objectFit: 'contain'}}src={value.image} alt={value.name_product} />
                                 </Link>
                                 {/* <span className="sticker">New</span> */}
                                 {

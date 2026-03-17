@@ -386,9 +386,14 @@ function Header(props) {
                                                                             {new Intl.NumberFormat('vi-VN', { style: 'decimal', decimal: 'VND' }).format(value.price_product) + ' VNĐ'} x {value.count}
                                                                         </span>
                                                                     </div>
-                                                                    <a className="close" onClick={() => handler_delete_mini(value.id_cart)}>
+                                                                    <button
+                                                                        type="button"
+                                                                        className="close"
+                                                                        onClick={() => handler_delete_mini(value.id_cart)}
+                                                                        style={{ background: 'transparent', border: 'none' }}
+                                                                    >
                                                                         <i className="fa fa-close"></i>
-                                                                    </a>
+                                                                    </button>
                                                                 </li>
                                                             ))}
                                                         </ul>
@@ -480,7 +485,15 @@ function Header(props) {
                                                             <ul style={{ width: 100 }} className='dropdown' >
                                                                 <li className="li_setting"><Link to={`/profile/${user._id}`} className="li_setting">{t('Profile')}</Link></li>
                                                                 <li className="li_setting"><Link to="/history" className="li_setting">{t('Order_Status')}</Link></li>
-                                                                <li className="li_setting"><a onClick={handler_logout}>{t('Logout')}</a></li>
+                                                                <li className="li_setting">
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={handler_logout}
+                                                                        style={{ background: 'transparent', border: 'none', padding: 0 }}
+                                                                    >
+                                                                        {t('Logout')}
+                                                                    </button>
+                                                                </li>
                                                             </ul>
                                                         </div>
                                                     )}
