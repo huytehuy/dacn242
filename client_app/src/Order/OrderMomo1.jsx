@@ -9,7 +9,7 @@ import Detail_OrderAPI from '../API/Detail_OrderAPI';
 import queryString from 'query-string';
 import io from "socket.io-client";
 import axios from 'axios';
-const socket = io('https://api.huytehuy.id.vn', {
+const socket = io('https://dacn242-server.onrender.com', {
     transports: ['websocket'], jsonp: false
 });
 socket.connect();
@@ -99,7 +99,7 @@ function OrderMomo(props) {
                             }
                           
                             detail_orders.push(data_detail_order);
-                            const response = await axios.patch('https://api.huytehuy.id.vn/api/admin/product/updateDepository', {
+                            const response = await axios.patch('https://dacn242-server.onrender.com/api/admin/product/updateDepository', {
                                 _id: data_detail_order.id_product,
                               
                             });
@@ -192,7 +192,7 @@ function OrderMomo(props) {
                                 }
                               
                                 detail_orders.push(data_detail_order);
-                                const response = await axios.patch('https://api.huytehuy.id.vn/api/admin/product/updateDepository', {
+                                const response = await axios.patch('https://dacn242-server.onrender.com/api/admin/product/updateDepository', {
                                     _id: data_detail_order.id_product,
                                   
                                 });

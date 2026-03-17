@@ -95,7 +95,7 @@ function Imgsearch(props) {
             setError(null);
 
             // Gửi yêu cầu đến backend Flask API
-            const response = await axios.post('https://api.huytehuy.id.vn/upload-image', formData, {
+            const response = await axios.post('https://dacn242-server.onrender.com/upload-image', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

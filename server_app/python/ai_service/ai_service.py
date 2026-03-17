@@ -319,7 +319,7 @@ def call_llm(prompt: str) -> str:
     elif provider == "google":
         import requests
         GEMINI_MODEL = "gemini-2.5-flash"
-        GEMINI_API_KEY = "AIzaSyDh-IjvLfaM-X7Sz_3Nkd8W7PQ1jQe9VQw"
+        GEMINI_API_KEY = "AIzaSyB4zHk0gjGhiUiHiRtI5T7XNd-NknwOUlc"
         if not GEMINI_API_KEY:
             return "Thiếu GEMINI_API_KEY"
         

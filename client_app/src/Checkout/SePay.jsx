@@ -257,7 +257,7 @@ function SePay({ information, total, from, distance, duration, price }) {
             }
             
             // Update order as paid
-            await axios.patch('https://api.huytehuy.id.vn/api/order/updatePaymentStatus', {
+            await axios.patch('https://dacn242-server.onrender.com/api/order/updatePaymentStatus', {
                 order_id: qrPaymentOrder.order_id,
                 pay: true
             });
@@ -265,7 +265,7 @@ function SePay({ information, total, from, distance, duration, price }) {
             // Update inventory for each product
             const data_carts = JSON.parse(localStorage.getItem('carts'));
             for (let i = 0; i < data_carts.length; i++) {
-                await axios.patch('https://api.huytehuy.id.vn/api/admin/product/updateDepository', {
+                await axios.patch('https://dacn242-server.onrender.com/api/admin/product/updateDepository', {
                     _id: data_carts[i].id_product,
                 });
             }
@@ -337,7 +337,7 @@ function SePay({ information, total, from, distance, duration, price }) {
                         
                         if (transactionStatus.status === "completed" || transactionStatus.status === "success") {
                             // Update order as paid
-                            await axios.patch('https://api.huytehuy.id.vn/api/order/updatePaymentStatus', {
+                            await axios.patch('https://dacn242-server.onrender.com/api/order/updatePaymentStatus', {
                                 order_id: storedTransaction.order_id,
                                 pay: true
                             });
@@ -345,7 +345,7 @@ function SePay({ information, total, from, distance, duration, price }) {
                             // Update inventory for each product
                             const data_carts = JSON.parse(localStorage.getItem('carts'));
                             for (let i = 0; i < data_carts.length; i++) {
-                                await axios.patch('https://api.huytehuy.id.vn/api/admin/product/updateDepository', {
+                                await axios.patch('https://dacn242-server.onrender.com/api/admin/product/updateDepository', {
                                     _id: data_carts[i].id_product,
                                 });
                             }

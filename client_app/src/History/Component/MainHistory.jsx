@@ -73,7 +73,7 @@ function MainHistory(props) {
 
         // try {
         //     // Gửi request đến API cập nhật kho
-        //     const response = await axios.patch('https://api.huytehuy.id.vn/api/admin/product/updateDepository1', {
+        //     const response = await axios.patch('https://dacn242-server.onrender.com/api/admin/product/updateDepository1', {
         //         _id: id,
         //         count: count 
         //     });

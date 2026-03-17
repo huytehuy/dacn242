@@ -20,10 +20,10 @@ import LogoCreditCard from './payment-icons/credit.jpg' // Add this import
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 
-// const socket = io('https://api.huytehuy.id.vn', {
+// const socket = io('https://dacn242-server.onrender.com', {
 //     transports: ['websocket'], jsonp: false
 // });
-const socket = io('https://api.huytehuy.id.vn', {
+const socket = io('https://dacn242-server.onrender.com', {
     transports: ['websocket'], jsonp: false
 });
 socket.connect();
@@ -73,7 +73,7 @@ function Checkout() {
 
         // try {
         //     // Gửi request đến API cập nhật kho
-        //     const response = await axios.patch('https://api.huytehuy.id.vn/api/admin/product/updateDepository', {
+        //     const response = await axios.patch('https://dacn242-server.onrender.com/api/admin/product/updateDepository', {
         //         _id: id,
         //     });
         //     console.log(response);
